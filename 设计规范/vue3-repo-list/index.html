@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>仓库列表页</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      #boot-tip {
+        max-width: 840px;
+        margin: 40px auto;
+        padding: 16px;
+        border: 1px solid #E0E6EC;
+        border-radius: 8px;
+        background: #FAFCFF;
+        color: #081E40;
+        line-height: 1.5;
+      }
+
+      #boot-tip p {
+        margin: 0 0 8px;
+      }
+
+      #boot-tip code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="boot-tip">
+      <p>当前页面是 Vue3 SFC 入口，需要通过 Vite 运行，直接 file:// 打开会是空白。</p>
+      <p>本地预览可直接打开：<code>./preview.html</code></p>
+      <p>或在该目录执行：<code>npm install</code> 后 <code>npm run dev</code></p>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', function () {
+        var tip = document.getElementById('boot-tip');
+        if (location.protocol !== 'file:' && tip) {
+          tip.style.display = 'none';
+        }
+      });
+    </script>
+  </body>
+</html>

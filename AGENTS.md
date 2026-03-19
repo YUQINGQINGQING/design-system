@@ -175,5 +175,42 @@
 
 ## 六、设计令牌
 - 所有颜色、尺寸等可量化值，请严格参考 `product-design-system.json` 中的定义。
+- 优先引用vue3组件库组件，组件库没有的才再去写，请严格参考 `package-lock.json` 中的定义。
+
+## 七、图标和Logo资源
+### 7.1 资源文件位置
+所有图标和图片资源均存放在本仓库的 `assets/` 目录下：
+设计规范/
+├── assets/
+│ ├── logo/
+│ │ └── lansuan-logo.svg
+│ ├── icons/
+│ │ ├── menu/
+│ │ │ ├── 项目首页.svg
+│ │ │ ├── 项目管理.svg
+│ │ │ └── ...（其他菜单图标）
+│ │ └── nav/
+│ │ ├── help.svg
+│ │ └── notification.svg
+│ └── avatars/
+│ └── default-avatar.png
+
+### 7.2 使用方式
+AI 生成代码时，必须从以下相对路径引用资源文件：
+
+```vue
+<!-- Logo -->
+<img src="/设计规范/assets/logo/lansuan-logo.svg" alt="蓝酸DevOps">
+
+<!-- 菜单图标 -->
+<img src="/设计规范/assets/icons/menu/项目首页.svg" class="menu-icon">
+
+<!-- 顶部图标 -->
+<img src="/设计规范/assets/icons/nav/help.svg" class="nav-icon">
+<img src="/设计规范/assets/icons/nav/notification.svg" class="nav-icon">
+
+<!-- 用户头像 -->
+<img src="/设计规范/assets/avatars/default-avatar.png" class="user-avatar">
+
 
 

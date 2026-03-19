@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>代码库页面预览</title>
+  <link rel="stylesheet" href="../CSS/design-tokens.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--ds-font-family-base);
+      background: var(--ds-color-page-background);
+      color: var(--ds-color-text-primary);
+    }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 164px 1fr;
+    }
+
+    .sidebar {
+      background: var(--ds-color-text-primary);
+      color: var(--ds-color-white);
+      display: flex;
+      flex-direction: column;
+      padding-top: 16px;
+    }
+
+    .brand {
+      padding: 0 16px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--ds-color-white);
+    }
+
+    .nav-group {
+      padding: 0 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-item {
+      height: 40px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ds-color-white);
+      font-size: 14px;
+      text-align: left;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .nav-item-active {
+      background: var(--ds-color-brand-click);
+      border-color: var(--ds-color-brand-click);
+    }
+
+    .main {
+      background: var(--ds-color-white);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      height: 56px;
+      border-bottom: 1px solid var(--ds-color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    .topbar-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.4;
+      font-weight: 700;
+      color: var(--ds-color-text-primary);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control {
+      height: 30px;
+      border: 1px solid var(--ds-input-border-normal);
+      border-radius: 4px;
+      background: var(--ds-input-bg-normal);
+      color: var(--ds-input-text-hover);
+      font-size: 12px;
+      padding: 0 10px;
+      min-width: 180px;
+    }
+
+    .control.small {
+      min-width: 120px;
+    }
+
+    .create-btn {
+      height: 30px;
+      border: 1px solid var(--ds-button-primary-bg-normal);
+      border-radius: 4px;
+      background: var(--ds-button-primary-bg-normal);
+      color: var(--ds-button-primary-text-normal);
+      font-size: 12px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .create-btn:hover {
+      background: var(--ds-button-primary-bg-hover);
+      border-color: var(--ds-button-primary-bg-hover);
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 32px;
+      height: 36px;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--ds-color-border);
+    }
+
+    .tab {
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--ds-color-assist);
+      font-size: 14px;
+      line-height: 1.4;
+      padding: 0 0 6px;
+      cursor: pointer;
+    }
+
+    .tab:hover {
+      color: var(--ds-color-brand);
+    }
+
+    .tab.active {
+      color: var(--ds-color-brand);
+      border-bottom-color: var(--ds-color-brand);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 8px;
+      border-top: 1px solid var(--ds-color-border);
+    }
+
+    .table th {
+      height: 40px;
+      text-align: left;
+      color: var(--ds-color-assist);
+      font-size: 14px;
+      font-weight: 400;
+      border-bottom: 1px solid var(--ds-color-border);
+      padding: 0 12px;
+      background: var(--ds-color-white);
+    }
+
+    .table td {
+      height: 50px;
+      border-bottom: 1px solid var(--ds-color-border);
+      color: var(--ds-color-text-primary);
+      font-size: 14px;
+      padding: 0 12px;
+      vertical-align: middle;
+    }
+
+    .repo-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--ds-color-assist);
+      color: var(--ds-color-white);
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .repo-text {
+      min-width: 0;
+    }
+
+    .repo-name {
+      color: var(--ds-color-text-primary);
+      font-size: 16px;
+      line-height: 1.4;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .repo-desc {
+      color: var(--ds-color-assist);
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .time-cell,
+    .creator-cell {
+      color: var(--ds-color-assist);
+      font-size: 14px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .link-btn {
+      border: none;
+      background: transparent;
+      color: var(--ds-color-brand);
+      font-size: 14px;
+      line-height: 1.4;
+      padding: 0;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+
+    .pager {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      color: var(--ds-color-assist);
+      font-size: 14px;
+      border-bottom: 1px solid var(--ds-color-border);
+    }
+
+    .pager-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid var(--ds-color-border);
+      background: var(--ds-color-white);
+      color: var(--ds-color-assist);
+      cursor: pointer;
+    }
+
+    .pager-btn.active {
+      border-color: var(--ds-color-brand);
+      color: var(--ds-color-brand);
+      background: var(--ds-button-secondary-brand-bg-hover);
+    }
+
+    @media (max-width: 1200px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .control {
+        min-width: 130px;
+      }
+
+      .table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const tabs = [
+          { key: 'all', label: '全部' },
+          { key: 'starred', label: '关注仓库' },
+          { key: 'internal-public', label: '内部公开' }
+        ];
+
+        const activeTab = ref('all');
+
+        const repos = ref([
+          { id: 1, name: 'BKI/khh1--fork', desc: '仓库描述内容', mergeRequests: 1, updated: '1周前', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'internal-public', starred: true, actions: ['进入仓库'] },
+          { id: 2, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 0, updated: '1月前', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'private', starred: false, actions: ['查看详情'] },
+          { id: 3, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 1, updated: '1天前', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'internal-public', starred: true, actions: ['申请权限'] },
+          { id: 4, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 0, updated: '1小时前', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'internal-public', starred: false, actions: ['进入仓库'] },
+          { id: 5, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 1, updated: '2025-01-02', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'private', starred: true, actions: ['进入仓库'] },
+          { id: 6, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 0, updated: '2025-01-02', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'internal-public', starred: false, actions: ['查看详情'] },
+          { id: 7, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 1, updated: '2025-01-02', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'internal-public', starred: true, actions: ['进入仓库'] },
+          { id: 8, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 0, updated: '2025-01-02', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'private', starred: false, actions: ['申请权限'] },
+          { id: 9, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 0, updated: '2025-01-02', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'internal-public', starred: false, actions: ['进入仓库'] },
+          { id: 10, name: 'BK1/khh1--fork', desc: '仓库描述内容', mergeRequests: 0, updated: '2025-01-02', created: '2025-01-02', creator: '胡静文[hujingwen]', type: 'private', starred: false, actions: ['查看详情'] }
+        ]);
+
+        const visibleRepos = computed(() => {
+          if (activeTab.value === 'starred') {
+            return repos.value.filter((item) => item.starred);
+          }
+          if (activeTab.value === 'internal-public') {
+            return repos.value.filter((item) => item.type === 'internal-public');
+          }
+          return repos.value;
+        });
+
+        function onAction(repo, action) {
+          window.alert(`操作：${action} - ${repo.name}`);
+        }
+
+        return {
+          tabs,
+          activeTab,
+          visibleRepos,
+          onAction
+        };
+      },
+      template: `
+        <div class="layout">
+          <aside class="sidebar">
+            <div class="brand">bkcode</div>
+            <nav class="nav-group">
+              <button class="nav-item">工作台</button>
+              <button class="nav-item nav-item-active">代码库</button>
+              <button class="nav-item">仓库组</button>
+            </nav>
+          </aside>
+
+          <main class="main">
+            <header class="topbar">
+              <h1 class="topbar-title">代码库</h1>
+              <div class="topbar-actions">
+                <input class="control" placeholder="请输入关键字" />
+                <select class="control small">
+                  <option>请选择状态</option>
+                </select>
+                <button class="create-btn">+ 创建代码库</button>
+              </div>
+            </header>
+
+            <section class="panel">
+              <div class="tabs">
+                <button
+                  v-for="tab in tabs"
+                  :key="tab.key"
+                  class="tab"
+                  :class="{ active: activeTab === tab.key }"
+                  @click="activeTab = tab.key"
+                >
+                  {{ tab.label }}
+                </button>
+              </div>
+
+              <table class="table" aria-label="仓库列表">
+                <thead>
+                  <tr>
+                    <th style="width: 56px;">&nbsp;</th>
+                    <th style="width: 38%;">仓库名称</th>
+                    <th style="width: 9%;">合并请求</th>
+                    <th style="width: 12%;">更新时间</th>
+                    <th style="width: 12%;">创建时间</th>
+                    <th style="width: 17%;">创建人</th>
+                    <th style="width: 12%;">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="repo in visibleRepos" :key="repo.id">
+                    <td>☆</td>
+                    <td>
+                      <div class="repo-cell">
+                        <div class="avatar">B</div>
+                        <div class="repo-text">
+                          <div class="repo-name">{{ repo.name }}</div>
+                          <div class="repo-desc">{{ repo.desc }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ repo.mergeRequests }}</td>
+                    <td class="time-cell">{{ repo.updated }}</td>
+                    <td class="time-cell">{{ repo.created }}</td>
+                    <td class="creator-cell">{{ repo.creator }}</td>
+                    <td>
+                      <button
+                        v-for="action in repo.actions"
+                        :key="action"
+                        class="link-btn"
+                        @click="onAction(repo, action)"
+                      >
+                        {{ action }}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="pager">
+                <span>共 100 条</span>
+                <button class="pager-btn active">1</button>
+                <button class="pager-btn">2</button>
+                <button class="pager-btn">3</button>
+                <button class="pager-btn">4</button>
+              </div>
+            </section>
+          </main>
+        </div>
+      `
+    }).mount('#app');
+  </script>
+</body>
+</html>

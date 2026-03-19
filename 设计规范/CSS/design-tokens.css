@@ -1,0 +1,233 @@
+:root {
+  /* Source: 设计规范/Json/产品设计系统规范.json */
+
+  /* Functional colors */
+  --ds-color-brand: #016BFF;
+  --ds-color-brand-click: #0160E6;
+  --ds-color-success: #14AB5B;
+  --ds-color-success-click: #129A52;
+  --ds-color-warning: #FFB549;
+  --ds-color-warning-click: #D8993E;
+  --ds-color-danger: #EA3736;
+  --ds-color-danger-click: #D33231;
+  --ds-color-assist: #8797AA;
+
+  /* Text, icon, background */
+  --ds-color-text-primary: #081E40;
+  --ds-color-text-secondary: #0160E6;
+  --ds-color-text-hint: #CBD5E0;
+  --ds-color-text-danger: #D33231;
+  --ds-color-page-background: #F5F9FF;
+  --ds-color-white: #FFFFFF;
+  --ds-color-disabled-text: #BDC6D0;
+
+  /* Control and table */
+  --ds-color-border: #E0E6EC;
+  --ds-color-table-divider: #ECF2FB;
+  --ds-color-table-header-fill: #FAFCFF;
+
+  /* Button: primary solid */
+  --ds-button-primary-bg-normal: #016BFF;
+  --ds-button-primary-bg-hover: #3489FF;
+  --ds-button-primary-bg-click: #0160E6;
+  --ds-button-primary-bg-disabled: #F5F7F9;
+  --ds-button-primary-text-normal: #FFFFFF;
+  --ds-button-primary-text-hover: #FFFFFF;
+  --ds-button-primary-text-click: #FFFFFF;
+  --ds-button-primary-text-disabled: #E0E6EC;
+
+  /* Button: secondary outline */
+  --ds-button-secondary-border-normal: #E0E6EC;
+  --ds-button-secondary-border-hover: #E0E6EC;
+  --ds-button-secondary-border-click: #CBD5E0;
+  --ds-button-secondary-border-disabled: #E0E6EC;
+  --ds-button-secondary-bg-normal: #FFFFFF;
+  --ds-button-secondary-bg-hover: #EAEEF3;
+  --ds-button-secondary-bg-click: #CBD5E0;
+  --ds-button-secondary-bg-disabled: #F5F7F9;
+  --ds-button-secondary-text-normal: #081E40;
+  --ds-button-secondary-text-hover: #081E40;
+  --ds-button-secondary-text-click: #081E40;
+  --ds-button-secondary-text-disabled: #E0E6EC;
+
+  /* Button: secondary brand outline */
+  --ds-button-secondary-brand-border-normal: #016BFF;
+  --ds-button-secondary-brand-border-hover: #016BFF;
+  --ds-button-secondary-brand-border-click: #0160E6;
+  --ds-button-secondary-brand-border-disabled: #E0E6EC;
+  --ds-button-secondary-brand-bg-normal: #FFFFFF;
+  --ds-button-secondary-brand-bg-hover: #F5F9FF;
+  --ds-button-secondary-brand-bg-click: #E6EFFC;
+  --ds-button-secondary-brand-bg-disabled: #F5F7F9;
+  --ds-button-secondary-brand-text-normal: #081E40;
+  --ds-button-secondary-brand-text-hover: #081E40;
+  --ds-button-secondary-brand-text-click: #081E40;
+  --ds-button-secondary-brand-text-disabled: #E0E6EC;
+
+  /* Button: danger solid */
+  --ds-button-danger-bg-normal: #EA3736;
+  --ds-button-danger-bg-hover: #EE5F5E;
+  --ds-button-danger-bg-click: #D33231;
+  --ds-button-danger-bg-disabled: #E0E6EC;
+  --ds-button-danger-text-normal: #FFFFFF;
+  --ds-button-danger-text-hover: #FFFFFF;
+  --ds-button-danger-text-click: #FFFFFF;
+  --ds-button-danger-text-disabled: #E0E6EC;
+
+  /* Button: danger outline */
+  --ds-button-danger-outline-border-normal: #E0E6EC;
+  --ds-button-danger-outline-border-hover: #F9C7C7;
+  --ds-button-danger-outline-border-click: #FACFCF;
+  --ds-button-danger-outline-border-disabled: #E0E6EC;
+  --ds-button-danger-outline-bg-normal: #FFFFFF;
+  --ds-button-danger-outline-bg-hover: #FDEBEB;
+  --ds-button-danger-outline-bg-click: #FEF5F5;
+  --ds-button-danger-outline-bg-disabled: #F5F7F9;
+  --ds-button-danger-outline-text-normal: #081E40;
+  --ds-button-danger-outline-text-hover: #081E40;
+  --ds-button-danger-outline-text-click: #EA3736;
+  --ds-button-danger-outline-text-disabled: #E0E6EC;
+
+  /* Button: icon */
+  --ds-button-icon-text-normal: #081E40;
+  --ds-button-icon-text-hover: #016BFF;
+  --ds-button-icon-text-click: #016BFF;
+  --ds-button-icon-text-disabled: #BDC6D0;
+  --ds-button-icon-filled-text-normal: #081E40;
+  --ds-button-icon-filled-text-disabled: #E0E6EC;
+  --ds-button-icon-filled-bg-hover: #EFF2F6;
+  --ds-button-icon-filled-bg-click: #EAEEF3;
+  --ds-button-icon-size: 22px;
+  --ds-button-icon-radius: 4px;
+
+  /* Button: text */
+  --ds-button-text-blueblack-normal: #081E40;
+  --ds-button-text-blueblack-hover: #016BFF;
+  --ds-button-text-blueblack-click: #0160E6;
+  --ds-button-text-blueblack-disabled: #E0E6EC;
+  --ds-button-text-brand-normal: #016BFF;
+  --ds-button-text-brand-hover: #3489FF;
+  --ds-button-text-brand-click: #0160E6;
+  --ds-button-text-brand-disabled: #E0E6EC;
+
+  /* Input and select */
+  --ds-input-height: 30px;
+  --ds-input-width: 200px;
+  --ds-input-radius: 4px;
+  --ds-input-font-size: 12px;
+  --ds-input-border-normal: #E0E6EC;
+  --ds-input-border-hover: #CBD5E0;
+  --ds-input-border-focus: #016BFF;
+  --ds-input-border-disabled: #E0E6EC;
+  --ds-input-border-error: #EA3736;
+  --ds-input-bg-normal: #FFFFFF;
+  --ds-input-bg-hover: #FFFFFF;
+  --ds-input-bg-focus: #FFFFFF;
+  --ds-input-bg-disabled: #F5F7F9;
+  --ds-input-bg-error: #FFFFFF;
+  --ds-input-text-normal: #CBD5E0;
+  --ds-input-text-hover: #8797AA;
+  --ds-input-text-focus: #081E40;
+  --ds-input-text-disabled: #BDC6D0;
+  --ds-input-text-error: #EA3736;
+
+  /* Dropdown option */
+  --ds-dropdown-option-height: 30px;
+  --ds-dropdown-option-min-width: 100px;
+  --ds-dropdown-option-radius: 4px;
+  --ds-dropdown-option-bg-hover: #F5F7F9;
+  --ds-dropdown-option-bg-click: #EFF2F6;
+
+  /* List and table */
+  --ds-list-header-height: 40px;
+  --ds-list-row-height: 40px;
+  --ds-list-header-bg: #FAFCFF;
+  --ds-list-header-title-color: #8797AA;
+  --ds-list-header-title-font-size: 12px;
+  --ds-list-divider-color: #ECF2FB;
+  --ds-list-divider-width: 1px;
+  --ds-list-row-bg-hover: #F2F8FF;
+  --ds-list-title-clickable-default: #081E40;
+  --ds-list-title-clickable-hover: #016BFF;
+  --ds-list-title-clickable-click: #0160E6;
+  --ds-list-title-non-clickable: #081E40;
+
+  /* Typography */
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-size-title-large: 16px;
+  --ds-font-size-title-medium: 14px;
+  --ds-font-size-body: 12px;
+  --ds-font-size-helper: 12px;
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-bold: 700;
+  --ds-line-height-title-large: 1.6;
+  --ds-line-height-title-medium: 1.5;
+  --ds-line-height-body: 1.4;
+  --ds-line-height-helper: 1.4;
+  --ds-text-title-large-color: #081E40;
+  --ds-text-title-medium-color: #081E40;
+  --ds-text-body-color: #081E40;
+  --ds-text-helper-color: #8797AA;
+
+  /* Spacing */
+  --ds-space-base-unit: 4px;
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-5: 24px;
+  --ds-space-6: 32px;
+  --ds-space-7: 48px;
+  --ds-space-card-padding: 16px;
+  --ds-space-section-gap: 24px;
+
+  /* Radius and shadow */
+  --ds-radius-button: 4px;
+  --ds-radius-input: 4px;
+  --ds-radius-card: 8px;
+  --ds-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  /* Card */
+  --ds-card-bg: #FFFFFF;
+  --ds-card-radius: 8px;
+  --ds-card-padding: 16px;
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ds-card-title-font-size: 16px;
+  --ds-card-title-font-weight: 700;
+  --ds-card-title-margin-bottom: 8px;
+  --ds-card-content-font-size: 14px;
+  --ds-card-content-font-weight: 400;
+
+  /* Modal */
+  --ds-modal-width-default: 400px;
+  --ds-modal-width-large: 800px;
+  --ds-modal-header-height: 50px;
+  --ds-modal-header-title-margin-left: 20px;
+  --ds-modal-header-title-font-size: 16px;
+  --ds-modal-header-title-font-weight: 700;
+  --ds-modal-divider-color: #F0F6FF;
+  --ds-modal-divider-width: 1px;
+  --ds-modal-body-padding: 20px;
+  --ds-modal-footer-height: 42px;
+  --ds-modal-footer-right-padding: 30px;
+  --ds-modal-footer-button-gap: 10px;
+  --ds-modal-close-size: 22px;
+  --ds-modal-close-bg: #8797AA;
+  --ds-modal-close-border: 1px solid #FFFFFF;
+  --ds-modal-close-icon-color: #FFFFFF;
+  --ds-modal-close-bg-hover: #081E40;
+
+  /* Layout */
+  --ds-breakpoint-desktop: 1024px;
+  --ds-grid-columns: 12;
+  --ds-grid-gutter: 24px;
+  --ds-layout-max-width: 1920px;
+
+  /* Interaction */
+  --ds-cursor-disabled: not-allowed;
+  --ds-cursor-clickable: pointer;
+  --ds-opacity-disabled: 0.4;
+
+  /* Library metadata */
+  --ds-component-library-path: "/path/to/company-component-library";
+}
