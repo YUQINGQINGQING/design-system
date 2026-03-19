@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>系统设置 - 租户管理</title>
+		<link rel="stylesheet" href="../CSS/design-tokens.css" />
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				font-family: var(--ds-font-family-base);
+				font-size: var(--ds-font-size-body);
+				color: var(--ds-color-text-primary);
+				background: var(--ds-color-page-background);
+			}
+
+			.app-shell {
+				min-height: 100vh;
+			}
+
+			.layout {
+				display: flex;
+				min-height: 100vh;
+			}
+
+			.sidebar {
+				width: 160px;
+				height: 100%;
+				min-height: 100vh;
+				background: #081E40;
+				padding: 0;
+				color: #ffffff;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.sidebar-header {
+				height: 60px;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				gap: 10px;
+				padding: 0 10px;
+			}
+
+			.sidebar-logo-wrap {
+				width: 36px;
+				height: 36px;
+				border-radius: 4px;
+				background: rgba(255, 255, 255, 0.1);
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			.sidebar-logo {
+				width: 24px;
+				height: 16px;
+				object-fit: contain;
+			}
+
+			.sidebar-title {
+				font-size: 16px;
+				font-weight: 700;
+				color: #ffffff;
+			}
+
+			.sidebar-divider {
+				height: 1px;
+				background: #213553;
+			}
+
+			.menu {
+				display: flex;
+				flex-direction: column;
+				flex: 1;
+				padding: 12px 10px 0 10px;
+				gap: 4px;
+			}
+
+			.menu-item {
+				height: 40px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				padding: 0 10px;
+				color: #ffffff;
+				text-decoration: none;
+				font-size: 14px;
+				position: relative;
+				border-radius: 4px;
+			}
+
+			.menu-item:hover {
+				background: rgba(255, 255, 255, 0.12);
+			}
+
+			.menu-item.active {
+				background: #526279;
+				color: #ffffff;
+				font-weight: 700;
+				border-radius: 4px;
+			}
+
+			.menu-item.active::before {
+				content: "";
+				position: absolute;
+				left: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 3px;
+				height: 14px;
+				border-radius: 999px;
+				background: var(--ds-color-brand);
+			}
+
+			.menu-icon {
+				width: 16px;
+				height: 16px;
+				display: inline-block;
+				background: #ced2d9;
+				-webkit-mask: var(--icon) center / contain no-repeat;
+				mask: var(--icon) center / contain no-repeat;
+				flex-shrink: 0;
+			}
+
+			.menu-item.active .menu-icon {
+				background: #ffffff;
+			}
+
+			.sidebar-user {
+				margin-top: auto;
+				padding: 12px 10px 12px 10px;
+				font-size: 12px;
+				color: #ced2d9;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				cursor: pointer;
+			}
+
+			.sidebar-footer {
+				margin-top: auto;
+				border-top: 1px solid #213553;
+				position: relative;
+			}
+
+			.footer-actions {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+				padding: 6px 10px 16px 10px;
+			}
+
+			.user-main {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				min-width: 0;
+			}
+
+			.user-arrow {
+				width: 14px;
+				height: 14px;
+				background: #ced2d9;
+				-webkit-mask: url('../assets/icons/nav/下拉 _ 右.svg') center / contain no-repeat;
+				mask: url('../assets/icons/nav/下拉 _ 右.svg') center / contain no-repeat;
+				transition: transform 0.2s ease;
+				flex-shrink: 0;
+			}
+
+			.sidebar-user.open .user-arrow {
+				transform: rotate(180deg);
+			}
+
+			.user-avatar {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				background: #f2c14b;
+				border: 1px solid #ffffff;
+				color: #ffffff;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 14px;
+				font-weight: 700;
+				flex-shrink: 0;
+			}
+
+			.user-meta {
+				display: flex;
+				flex-direction: column;
+				line-height: 1.3;
+				min-width: 0;
+				flex: 1;
+			}
+
+			.user-name {
+				color: #ffffff;
+				font-size: 12px;
+				font-weight: 700;
+			}
+
+			.user-email {
+				color: #ced2d9;
+				font-size: 11px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: block;
+			}
+
+			.user-popover {
+				position: absolute;
+				left: calc(100% + 8px);
+				bottom: 12px;
+				width: 208px;
+				padding: 10px;
+				border: 1px solid #e0e6ec;
+				border-radius: 8px;
+				background: #ffffff;
+				box-shadow: 0 8px 24px rgba(8, 30, 64, 0.15);
+				opacity: 0;
+				pointer-events: none;
+				transform: translateX(-6px);
+				transition: opacity 0.2s ease, transform 0.2s ease;
+			}
+
+			.user-popover.open {
+				opacity: 1;
+				pointer-events: auto;
+				transform: translateX(0);
+			}
+
+			.popover-title {
+				margin: 0;
+				font-size: 14px;
+				font-weight: 700;
+				color: #081e40;
+				padding: 0 16px;
+			}
+
+			.popover-item {
+				height: 30px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				color: #081e40;
+				font-size: 12px;
+				padding: 0 10px;
+				border-radius: 4px;
+				cursor: pointer;
+			}
+
+			.popover-item + .popover-item {
+				margin-top: 6px;
+			}
+
+			.popover-item:hover {
+				background: #f5f7f9;
+			}
+
+			.popover-item:active {
+				background: #eff2f6;
+			}
+
+			.popover-item.logout:hover {
+				background: rgba(234, 55, 54, 0.1);
+				color: #081e40;
+			}
+
+			.popover-item.logout:hover .popover-icon {
+				background: #081e40;
+			}
+
+			.popover-item.logout:active {
+				background: rgba(234, 55, 54, 0.05);
+				color: #ea3736;
+			}
+
+			.popover-item.logout:active .popover-icon {
+				background: #ea3736;
+			}
+
+			.popover-left {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.popover-icon {
+				width: 12px;
+				height: 12px;
+				display: block;
+				background: #081e40;
+				-webkit-mask: var(--icon) center / contain no-repeat;
+				mask: var(--icon) center / contain no-repeat;
+				flex-shrink: 0;
+			}
+
+			.popover-divider {
+				margin: 8px 0;
+				height: 1px;
+				background: #e9eef4;
+			}
+
+			.popover-select {
+				margin: 0 0 8px;
+				height: 30px;
+				border: 1px solid #e0e6ec;
+				border-radius: 4px;
+				background: #ffffff;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 12px;
+				color: #081e40;
+				font-size: 12px;
+				font-weight: 400;
+			}
+
+			.popover-select:hover {
+				border-color: #cbd5e0;
+			}
+
+			.popover-select:active {
+				border-color: #016bff;
+			}
+
+			.popover-right {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				color: #9aa8b8;
+				font-size: 12px;
+			}
+
+			.popover-right-icon {
+				width: 12px;
+				height: 12px;
+				background: #b8c4d1;
+				-webkit-mask: url('../assets/icons/nav/下拉 _ 下.svg') center / contain no-repeat;
+				mask: url('../assets/icons/nav/下拉 _ 下.svg') center / contain no-repeat;
+			}
+
+			.main {
+				flex: 1;
+				padding: 24px;
+			}
+
+			.panel {
+				background: var(--ds-color-white);
+				border-radius: var(--ds-radius-card);
+				box-shadow: var(--ds-shadow-card);
+				padding: 16px;
+			}
+
+			.panel-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 16px;
+				gap: 12px;
+				flex-wrap: wrap;
+			}
+
+			.panel-title {
+				margin: 0;
+				font-size: 16px;
+				font-weight: 700;
+				color: var(--ds-color-text-primary);
+			}
+
+			.toolbar {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+			}
+
+			.search-input {
+				width: 220px;
+				height: var(--ds-input-height);
+				border: 1px solid var(--ds-input-border-normal);
+				border-radius: var(--ds-input-radius);
+				padding: 0 12px;
+				font-size: 12px;
+				color: var(--ds-input-text-focus);
+				outline: none;
+			}
+
+			.btn-primary {
+				height: var(--ds-input-height);
+				border: none;
+				border-radius: var(--ds-radius-button);
+				background: var(--ds-button-primary-bg-normal);
+				color: var(--ds-button-primary-text-normal);
+				padding: 0 16px;
+				cursor: pointer;
+			}
+
+			.tenant-table-wrap {
+				border: 1px solid var(--ds-color-table-divider);
+				border-radius: var(--ds-radius-button);
+				overflow: hidden;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			thead tr {
+				height: 40px;
+				background: var(--ds-color-table-header-fill);
+			}
+
+			th,
+			td {
+				text-align: left;
+				padding: 0 12px;
+				border-bottom: 1px solid var(--ds-color-table-divider);
+				height: 40px;
+				white-space: nowrap;
+			}
+
+			th {
+				color: var(--ds-color-assist);
+				font-size: 12px;
+				font-weight: 400;
+			}
+
+			.status {
+				color: #016bff;
+			}
+
+			.status.disabled {
+				color: #8797aa;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="app-shell">
+			<div class="layout">
+				<aside class="sidebar">
+					<div class="sidebar-header">
+						<span class="sidebar-logo-wrap">
+							<img class="sidebar-logo" src="../assets/logo/深色-独立-logo.svg" alt="系统Logo" />
+						</span>
+						<span class="sidebar-title">系统设置</span>
+					</div>
+					<div class="sidebar-divider"></div>
+					<nav class="menu" aria-label="系统设置菜单" data-menu-group="primary">
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/系统概览.svg')"></span><span>系统概览</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/席位管理.svg')"></span><span>席位管理</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/基础配置.svg')"></span><span>基础配置</span></a>
+						<a class="menu-item active" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/租户管理.svg')"></span><span>租户管理</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/集成配置.svg')"></span><span>集成配置</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/制品配置.svg')"></span><span>制品配置</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/测试配置.svg')"></span><span>测试配置</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/度量配置.svg')"></span><span>度量配置</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/OpenAPI.svg')"></span><span>OpenAPI</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/意见反馈.svg')"></span><span>意见反馈</span></a>
+						<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/智能引导.svg')"></span><span>智能引导</span></a>
+					</nav>
+					<div class="sidebar-footer">
+						<div class="footer-actions" data-menu-group="footer">
+							<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/消息通知.svg')"></span><span>消息通知</span></a>
+							<a class="menu-item" href="#"><span class="menu-icon" style="--icon:url('../assets/icons/nav/帮助中心.svg')"></span><span>帮助中心</span></a>
+						</div>
+						<div class="sidebar-user">
+							<span class="user-main">
+								<span class="user-avatar">胡</span>
+								<span class="user-meta">
+									<span class="user-name">胡静文</span>
+									<span class="user-email">huijingwen@company.com</span>
+								</span>
+							</span>
+							<span class="user-arrow" aria-hidden="true"></span>
+						</div>
+						<div class="user-popover" aria-hidden="true">
+							<div class="popover-select">
+								<span>蓝盾</span>
+								<span class="popover-right-icon" aria-hidden="true"></span>
+							</div>
+							<div class="popover-divider"></div>
+							<div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/用户.svg')"></span><span>个人中心</span></span></div>
+							<div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/系统设置.svg')"></span><span>系统设置</span></span></div>
+							<div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/控制台.svg')"></span><span>控制台</span></span></div>
+							<div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/日志审计.svg')"></span><span>日志审计</span></span></div>
+							<div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/版本信息.svg')"></span><span>版本信息</span></span></div>
+							<div class="popover-item">
+								<span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/外观.svg')"></span><span>外观</span></span>
+								<span class="popover-right"><span>深色</span><span class="popover-right-icon" aria-hidden="true"></span></span>
+							</div>
+							<div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/中英文.svg')"></span><span>English</span></span></div>
+							<div class="popover-item logout"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/注销.svg')"></span><span>注销</span></span></div>
+						</div>
+					</div>
+				</aside>
+
+				<main class="main">
+					<section class="panel">
+						<div class="panel-header">
+							<h1 class="panel-title">租户管理</h1>
+							<div class="toolbar">
+								<input class="search-input" type="text" placeholder="请输入租户名称 / 编码" />
+								<button class="btn-primary" type="button">新建租户</button>
+							</div>
+						</div>
+
+						<div class="tenant-table-wrap">
+							<table aria-label="租户列表">
+								<thead>
+									<tr>
+										<th>租户名称</th>
+										<th>租户编码</th>
+										<th>管理员</th>
+										<th>席位数</th>
+										<th>创建时间</th>
+										<th>状态</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr><td>蓝酸研发中心</td><td>tenant-lansuan-rd</td><td>胡静文</td><td>120</td><td>2026-01-08 10:24</td><td><span class="status">启用</span></td></tr>
+									<tr><td>金融交付中心</td><td>tenant-finance-delivery</td><td>李晨</td><td>86</td><td>2026-01-15 14:33</td><td><span class="status">启用</span></td></tr>
+									<tr><td>智能测试中心</td><td>tenant-ai-test</td><td>张雨</td><td>64</td><td>2026-02-01 09:10</td><td><span class="status disabled">停用</span></td></tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</main>
+			</div>
+		</div>
+			<script>
+				(function () {
+					var userCard = document.querySelector('.sidebar-user');
+					var popover = document.querySelector('.user-popover');
+					if (!userCard || !popover) {
+						return;
+					}
+
+					userCard.addEventListener('click', function (event) {
+						event.stopPropagation();
+						var opening = !popover.classList.contains('open');
+						userCard.classList.toggle('open', opening);
+						popover.classList.toggle('open', opening);
+					});
+
+					document.querySelectorAll('[data-menu-group]').forEach(function (group) {
+						group.addEventListener('click', function (event) {
+							var item = event.target.closest('.menu-item');
+							if (!item || !group.contains(item)) {
+								return;
+							}
+
+							group.querySelectorAll('.menu-item.active').forEach(function (activeItem) {
+								activeItem.classList.remove('active');
+							});
+							item.classList.add('active');
+						});
+					});
+
+					document.addEventListener('click', function () {
+						userCard.classList.remove('open');
+						popover.classList.remove('open');
+					});
+
+					popover.addEventListener('click', function (event) {
+						event.stopPropagation();
+					});
+				})();
+			</script>
+	</body>
+</html>
