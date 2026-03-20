@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>框架2 - 项目外菜单 / 工作台</title>
+    <link rel="stylesheet" href="../CSS/design-tokens.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        font-family: var(--ds-font-family-base);
+        font-size: var(--ds-font-size-body);
+        color: #081E40;
+        background: #F5F9FF;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 160px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #081E40;
+      }
+
+      .sidebar-brand {
+        height: 56px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #213553;
+      }
+
+      .brand-logo {
+        width: 130px;
+        height: auto;
+        object-fit: contain;
+        object-position: left center;
+      }
+
+      .sidebar-scroll {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .menu-section {
+        padding: 12px 8px 0;
+      }
+
+      .menu-label {
+        height: 28px;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        color: #8797AA;
+        font-size: 12px;
+      }
+
+      .menu-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .menu-item {
+        position: relative;
+        height: 40px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 4px;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .menu-item:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .menu-item.active {
+        background: #526279;
+        font-weight: 700;
+      }
+
+      .menu-item.active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 3px;
+        height: 14px;
+        transform: translateY(-50%);
+        border-radius: 999px;
+        background: #016BFF;
+      }
+
+      .menu-icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+        flex-shrink: 0;
+        background-color: transparent;
+        background-image: var(--icon);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      .menu-item.active .menu-icon {
+        opacity: 1;
+      }
+
+      .menu-icon-white {
+        filter: brightness(0) saturate(100%) invert(100%);
+        opacity: 1;
+      }
+
+      .sidebar-footer {
+        border-top: 1px solid #213553;
+        position: relative;
+      }
+
+      .footer-actions {
+        padding: 6px 8px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .sidebar-user {
+        padding: 12px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .user-main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid #FFFFFF;
+        background: #F2C14B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .user-meta {
+        min-width: 0;
+      }
+
+      .user-name {
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .user-email {
+        color: #CED2D9;
+        font-size: 11px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .user-arrow {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        background-color: transparent;
+        background-image: url('../assets/icons/nav/下拉 _ 右.svg');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(100%);
+        transition: transform 0.2s ease;
+      }
+
+      .sidebar-user.open .user-arrow {
+        transform: rotate(180deg);
+      }
+
+      .user-popover {
+        position: absolute;
+        left: calc(100% + 8px);
+        bottom: 12px;
+        width: 208px;
+        padding: 10px;
+        border: 1px solid #E0E6EC;
+        border-radius: 8px;
+        background: #FFFFFF;
+        box-shadow: 0 8px 24px rgba(8, 30, 64, 0.15);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-6px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 5;
+      }
+
+      .user-popover.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+      }
+
+      .popover-select {
+        height: 30px;
+        padding: 0 12px;
+        border: 1px solid #E0E6EC;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #081E40;
+        font-size: 12px;
+      }
+
+      .popover-select:hover {
+        border-color: #CBD5E0;
+      }
+
+      .popover-select:active {
+        border-color: #016BFF;
+      }
+
+      .popover-divider {
+        height: 1px;
+        margin: 8px 0;
+        background: #E9EEF4;
+      }
+
+      .popover-item {
+        height: 30px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 4px;
+        color: #081E40;
+        font-size: 12px;
+      }
+
+      .popover-item + .popover-item {
+        margin-top: 6px;
+      }
+
+      .popover-item:hover {
+        background: #F5F7F9;
+      }
+
+      .popover-item:active {
+        background: #EFF2F6;
+      }
+
+      .popover-item.logout:hover {
+        background: rgba(234, 55, 54, 0.1);
+        color: #081E40;
+      }
+
+      .popover-item.logout:active {
+        background: rgba(234, 55, 54, 0.05);
+        color: #EA3736;
+      }
+
+      .popover-item.logout:active .popover-icon {
+        filter: brightness(0) saturate(100%) invert(31%) sepia(82%) saturate(2581%) hue-rotate(338deg) brightness(97%) contrast(92%);
+      }
+
+      .popover-left,
+      .popover-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .popover-right {
+        color: #8797AA;
+      }
+
+      .popover-icon,
+      .popover-right-icon {
+        width: 12px;
+        height: 12px;
+        display: block;
+        flex-shrink: 0;
+        background-color: transparent;
+        background-image: var(--icon);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(10%) sepia(38%) saturate(1359%) hue-rotate(189deg) brightness(97%) contrast(101%);
+      }
+
+      .popover-right-icon {
+        opacity: 1;
+      }
+
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .workspace-bar {
+        height: 56px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        background: #FFFFFF;
+        border-bottom: 1px solid #E9EEF4;
+      }
+
+      .workspace-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-width: 0;
+      }
+
+      .workspace-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #081E40;
+        flex-shrink: 0;
+      }
+
+      .workspace-divider {
+        width: 1px;
+        height: 20px;
+        background: #E9EEF4;
+        flex-shrink: 0;
+      }
+
+      .workspace-select {
+        width: 220px;
+        height: 32px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #E0E6EC;
+        border-radius: 4px;
+        background: #FFFFFF;
+        color: #081E40;
+        font-size: 12px;
+      }
+
+      .workspace-select:hover {
+        border-color: #CBD5E0;
+      }
+
+      .workspace-select:active {
+        border-color: #016BFF;
+      }
+
+      .workspace-right {
+        color: #8797AA;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .workspace-body {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 360px;
+      }
+
+      .primary-column,
+      .secondary-column {
+        min-height: 0;
+      }
+
+      .primary-column {
+        border-right: 1px solid #E9EEF4;
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .secondary-column {
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .panel-header {
+        min-height: 44px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid #ECF2FB;
+      }
+
+      .panel-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #081E40;
+      }
+
+      .panel-title-icon {
+        width: 16px;
+        height: 16px;
+        background: #526279;
+          -webkit-mask-image: var(--icon);
+          -webkit-mask-position: center;
+          -webkit-mask-size: contain;
+          -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+      }
+
+      .panel-tabs {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 6px;
+        background: #F5F7F9;
+      }
+
+      .tab-chip {
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        color: #526279;
+        font-size: 12px;
+        text-decoration: none;
+      }
+
+      .tab-chip.active {
+        background: #FFFFFF;
+        color: #016BFF;
+        font-weight: 700;
+        box-shadow: 0 1px 2px rgba(8, 30, 64, 0.06);
+      }
+
+      .panel-body {
+        flex: 1;
+        min-height: 0;
+      }
+
+      .empty-wrap {
+        height: 100%;
+        min-height: 560px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .empty-state {
+        text-align: center;
+      }
+
+      .empty-graphic {
+        width: 132px;
+        height: 132px;
+        margin: 0 auto 16px;
+        background: #EAF2FF;
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .empty-graphic::before {
+        content: "";
+        position: absolute;
+        inset: 20px;
+        border-radius: 16px;
+        background: #FFFFFF;
+        box-shadow: 0 8px 20px rgba(1, 107, 255, 0.08);
+        background-image: url('../assets/icons/nav/暂无数据.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 78px 78px;
+      }
+
+      .empty-text {
+        color: #081E40;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .secondary-panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .secondary-panel + .secondary-panel {
+        border-top: 1px solid #E9EEF4;
+      }
+
+      .panel-tools {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-ghost,
+      .btn-primary-light {
+        height: 30px;
+        padding: 0 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .btn-ghost {
+        border: 1px solid #E0E6EC;
+        background: #FFFFFF;
+        color: #081E40;
+      }
+
+      .btn-ghost:hover {
+        background: #EAEEF3;
+      }
+
+      .btn-primary-light {
+        border: 1px solid #016BFF;
+        background: #FFFFFF;
+        color: #016BFF;
+      }
+
+      .btn-primary-light:hover {
+        background: #F5F9FF;
+      }
+
+      .search-bar {
+        padding: 12px 16px;
+        border-bottom: 1px solid #ECF2FB;
+      }
+
+      .search-field {
+        height: 32px;
+        border: 1px solid #E0E6EC;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 10px;
+        color: #8797AA;
+        font-size: 12px;
+      }
+
+      .search-field:hover {
+        border-color: #CBD5E0;
+      }
+
+      .field-icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        background: #CBD5E0;
+          -webkit-mask-image: var(--icon);
+          -webkit-mask-position: center;
+          -webkit-mask-size: contain;
+          -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+      }
+
+      .history-list,
+      .notice-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .history-item,
+      .notice-item {
+        padding: 0 16px;
+        border-bottom: 1px solid #ECF2FB;
+      }
+
+      .history-link {
+        height: 38px;
+        display: grid;
+        grid-template-columns: 16px minmax(0, 1fr) 24px;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: #526279;
+        font-size: 12px;
+      }
+
+      .history-item:hover {
+        background: #F5F9FF;
+      }
+
+      .star-icon {
+        width: 14px;
+        height: 14px;
+        background: #CBD5E0;
+          -webkit-mask-image: url('../assets/icons/nav/收藏.svg');
+          -webkit-mask-position: center;
+          -webkit-mask-size: contain;
+          -webkit-mask-repeat: no-repeat;
+          mask-image: url('../assets/icons/nav/收藏.svg');
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+      }
+
+      .history-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .history-badge {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: #EEF5FF;
+        color: #5B8FF9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
+      .notice-list {
+        overflow: auto;
+      }
+
+      .notice-item {
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+
+      .notice-row {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .notice-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #F2F8FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .notice-avatar::before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        background: #081E40;
+          -webkit-mask-image: url('../assets/icons/nav/消息通知.svg');
+          -webkit-mask-position: center;
+          -webkit-mask-size: contain;
+          -webkit-mask-repeat: no-repeat;
+          mask-image: url('../assets/icons/nav/消息通知.svg');
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+      }
+
+      .notice-content {
+        min-width: 0;
+      }
+
+      .notice-text {
+        color: #081E40;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .notice-date {
+        margin-top: 8px;
+        color: #8797AA;
+        font-size: 12px;
+        text-align: right;
+      }
+
+      .toolbar-select {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #081E40;
+        font-size: 12px;
+      }
+
+      .toolbar-select .field-icon {
+        width: 12px;
+        height: 12px;
+        background: #8797AA;
+      }
+
+      @media (max-width: 1200px) {
+        .workspace-body {
+          grid-template-columns: 1fr;
+        }
+
+        .primary-column {
+          border-right: none;
+          border-bottom: 1px solid #E9EEF4;
+        }
+      }
+
+      @media (max-width: 960px) {
+        .app {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          min-height: auto;
+        }
+
+        .workspace-bar {
+          height: auto;
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 12px 16px;
+        }
+
+        .workspace-left {
+          width: 100%;
+          flex-wrap: wrap;
+        }
+
+        .workspace-right {
+          white-space: normal;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <img class="brand-logo" src="../assets/logo/icon-bk-devops-white.svg" alt="蓝酸 DevOps" />
+        </div>
+
+        <div class="sidebar-scroll">
+          <div class="menu-section">
+            <nav class="menu-group" aria-label="工作台菜单" data-menu-group="primary" data-icon-mode="swap">
+              <a class="menu-item active" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/工作台-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/工作台-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/工作台-深色-click.svg')"></span>
+                <span>工作台</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/软件源-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/软件源-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/软件源-深色-default.svg')"></span>
+                <span>软件源</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/文档管理-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/文档管理-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/文档管理-深色-default.svg')"></span>
+                <span>文档管理</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/GitLab-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/GitLab-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/GitLab-深色-default.svg')"></span>
+                <span>Gitlab</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/价值流插件库-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/价值流插件库-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/价值流插件库-深色-default.svg')"></span>
+                <span>价值流插件库</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/效能洞察-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/效能洞察-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/效能洞察-深色-default.svg')"></span>
+                <span>效能洞察</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/研发商店-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/研发商店-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/研发商店-深色-default.svg')"></span>
+                <span>研发商店</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="footer-actions" data-menu-group="footer">
+            <a class="menu-item" href="#">
+              <span class="menu-icon menu-icon-white" style="--icon:url('../assets/icons/menu/系统设置/帮助中心.svg')"></span>
+              <span>帮助中心</span>
+            </a>
+            <a class="menu-item" href="#">
+              <span class="menu-icon menu-icon-white" style="--icon:url('../assets/icons/menu/系统设置/消息中心.svg')"></span>
+              <span>消息通知</span>
+            </a>
+          </div>
+
+          <div class="sidebar-user">
+            <div class="user-main">
+              <div class="avatar">余</div>
+              <div class="user-meta">
+                <div class="user-name">余倩</div>
+                <div class="user-email">yuqian@better.devops</div>
+              </div>
+            </div>
+            <span class="user-arrow" aria-hidden="true"></span>
+          </div>
+
+          <div class="user-popover" aria-hidden="true">
+            <div class="popover-select">
+              <span>蓝盾</span>
+              <span class="popover-right-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')" aria-hidden="true"></span>
+            </div>
+            <div class="popover-divider"></div>
+            <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/用户.svg')"></span><span>个人中心</span></span></div>
+            <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/系统设置.svg')"></span><span>系统设置</span></span></div>
+            <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/控制台.svg')"></span><span>控制台</span></span></div>
+            <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/日志审计.svg')"></span><span>日志审计</span></span></div>
+            <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/版本信息.svg')"></span><span>版本信息</span></span></div>
+            <div class="popover-item">
+              <span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/外观.svg')"></span><span>外观</span></span>
+              <span class="popover-right"><span>深色</span><span class="popover-right-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')" aria-hidden="true"></span></span>
+            </div>
+            <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/中英文.svg')"></span><span>English</span></span></div>
+            <div class="popover-item logout"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/注销.svg')"></span><span>注销</span></span></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="workspace-bar">
+          <div class="workspace-left">
+            <h1 class="workspace-title">工作台</h1>
+            <div class="workspace-divider"></div>
+            <div class="workspace-select">
+              <span>默认工作台</span>
+              <span class="popover-right-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="workspace-right">工作台可见权限：全员可见</div>
+        </header>
+
+        <section class="workspace-body">
+          <div class="primary-column">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-icon" style="--icon:url('../assets/icons/nav/工作项列表.svg')"></span>
+                <span>我的待办</span>
+              </div>
+              <div class="panel-tabs" data-tab-group="todo-tabs">
+                <a class="tab-chip active" href="#">敏捷协同 0</a>
+                <a class="tab-chip" href="#">待分解 0</a>
+                <a class="tab-chip" href="#">测试管理 0</a>
+                <a class="tab-chip" href="#">持续集成 0</a>
+                <a class="tab-chip" href="#">评审单 0</a>
+              </div>
+            </div>
+            <div class="panel-body empty-wrap">
+              <div class="empty-state">
+                <div class="empty-graphic"></div>
+                <div class="empty-text">暂无数据</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="secondary-column">
+            <section class="secondary-panel" style="height: 352px;">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <span class="panel-title-icon" style="--icon:url('../assets/icons/nav/项目.svg')"></span>
+                  <span>项目历史</span>
+                </div>
+                <div class="panel-tools">
+                  <button class="btn-primary-light" type="button">+ 创建项目</button>
+                  <button class="btn-ghost" type="button">所有项目</button>
+                </div>
+              </div>
+              <div class="search-bar">
+                <div class="search-field">
+                  <span class="field-icon" style="--icon:url('../assets/icons/nav/搜索.svg')"></span>
+                  <span>请输入关键字</span>
+                </div>
+              </div>
+              <ul class="history-list">
+                <li class="history-item">
+                  <a class="history-link" href="#">
+                    <span class="star-icon"></span>
+                    <span class="history-name">演示数据项目</span>
+                    <span class="history-badge">演</span>
+                  </a>
+                </li>
+                <li class="history-item">
+                  <a class="history-link" href="#">
+                    <span class="star-icon"></span>
+                    <span class="history-name">halley1-1</span>
+                    <span class="history-badge">h</span>
+                  </a>
+                </li>
+                <li class="history-item">
+                  <a class="history-link" href="#">
+                    <span class="star-icon"></span>
+                    <span class="history-name">ljp</span>
+                    <span class="history-badge">l</span>
+                  </a>
+                </li>
+                <li class="history-item">
+                  <a class="history-link" href="#">
+                    <span class="star-icon"></span>
+                    <span class="history-name">halley1</span>
+                    <span class="history-badge">h</span>
+                  </a>
+                </li>
+              </ul>
+            </section>
+
+            <section class="secondary-panel" style="flex: 1; min-height: 0;">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <span class="panel-title-icon" style="--icon:url('../assets/icons/nav/消息通知.svg')"></span>
+                  <span>消息通知</span>
+                </div>
+                <div class="panel-tools">
+                  <div class="toolbar-select">
+                    <span>全部消息</span>
+                    <span class="field-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')"></span>
+                  </div>
+                  <button class="btn-ghost" type="button">历史通知</button>
+                </div>
+              </div>
+              <ul class="notice-list">
+                <li class="notice-item">
+                  <div class="notice-row">
+                    <div class="notice-avatar"></div>
+                    <div class="notice-content">
+                      <div class="notice-text">[admin]系统管理员给你分配了 CFLOW 平台席位，请在项目价值菜单中使用功能</div>
+                      <div class="notice-date">2025年10月27日</div>
+                    </div>
+                  </div>
+                </li>
+                <li class="notice-item">
+                  <div class="notice-row">
+                    <div class="notice-avatar"></div>
+                    <div class="notice-content">
+                      <div class="notice-text">[admin]系统管理员给你分配了 CMEAS 平台席位，请在项目度量菜单中使用功能</div>
+                      <div class="notice-date">2025年10月27日</div>
+                    </div>
+                  </div>
+                </li>
+                <li class="notice-item">
+                  <div class="notice-row">
+                    <div class="notice-avatar"></div>
+                    <div class="notice-content">
+                      <div class="notice-text">[admin]系统管理员给你分配了 CTEST 平台席位，请在项目测试菜单中使用功能</div>
+                      <div class="notice-date">2025年10月27日</div>
+                    </div>
+                  </div>
+                </li>
+                <li class="notice-item">
+                  <div class="notice-row">
+                    <div class="notice-avatar"></div>
+                    <div class="notice-content">
+                      <div class="notice-text">[admin]系统管理员给你分配了 CTEAM 平台席位，请在项目协作菜单中使用功能</div>
+                      <div class="notice-date">2025年10月27日</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        function syncMenuIcons(group) {
+          if (!group || group.getAttribute('data-icon-mode') !== 'swap') {
+            return;
+          }
+
+          group.querySelectorAll('.menu-item').forEach(function (item) {
+            var icon = item.querySelector('.menu-icon');
+            if (!icon) {
+              return;
+            }
+
+            var defaultIcon = icon.getAttribute('data-icon-default');
+            var clickIcon = icon.getAttribute('data-icon-click');
+            if (!defaultIcon || !clickIcon) {
+              return;
+            }
+
+            var url = item.classList.contains('active') ? clickIcon : defaultIcon;
+            icon.style.setProperty('--icon', "url('" + url + "')");
+          });
+        }
+
+        var userCard = document.querySelector('.sidebar-user');
+        var popover = document.querySelector('.user-popover');
+
+        if (userCard && popover) {
+          userCard.addEventListener('click', function (event) {
+            event.stopPropagation();
+            var opening = !popover.classList.contains('open');
+            userCard.classList.toggle('open', opening);
+            popover.classList.toggle('open', opening);
+          });
+
+          popover.addEventListener('click', function (event) {
+            event.stopPropagation();
+          });
+
+          document.addEventListener('click', function () {
+            userCard.classList.remove('open');
+            popover.classList.remove('open');
+          });
+        }
+
+        document.querySelectorAll('[data-menu-group]').forEach(function (group) {
+          syncMenuIcons(group);
+
+          group.addEventListener('click', function (event) {
+            var item = event.target.closest('.menu-item');
+            if (!item || !group.contains(item)) {
+              return;
+            }
+
+            group.querySelectorAll('.menu-item.active').forEach(function (activeItem) {
+              activeItem.classList.remove('active');
+            });
+            item.classList.add('active');
+            syncMenuIcons(group);
+          });
+        });
+
+        document.querySelectorAll('[data-tab-group]').forEach(function (group) {
+          group.addEventListener('click', function (event) {
+            var tab = event.target.closest('.tab-chip');
+            if (!tab || !group.contains(tab)) {
+              return;
+            }
+
+            event.preventDefault();
+            group.querySelectorAll('.tab-chip.active').forEach(function (activeTab) {
+              activeTab.classList.remove('active');
+            });
+            tab.classList.add('active');
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

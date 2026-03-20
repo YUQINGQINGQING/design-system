@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>框架1 - 项目内菜单</title>
+    <link rel="stylesheet" href="../CSS/design-tokens.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        font-family: var(--ds-font-family-base);
+        font-size: var(--ds-font-size-body);
+        color: var(--ds-color-text-primary);
+        background: var(--ds-color-page-background);
+      }
+
+      a,
+      button,
+      input {
+        font: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .project-bar {
+        height: 56px;
+        padding: 0 16px 0 176px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: #FFFFFF;
+        border-bottom: 1px solid #E9EEF4;
+      }
+
+      .project-nav,
+      .tool-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .project-nav {
+        overflow: auto hidden;
+        scrollbar-width: none;
+      }
+
+      .project-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-item,
+      .tool-item {
+        border: none;
+        background: transparent;
+        color: #526279;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .nav-item {
+        height: 32px;
+        padding: 0 12px;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .tool-item {
+        height: 28px;
+        padding: 0 10px;
+        border-radius: 6px;
+        font-size: 12px;
+      }
+
+      .nav-item:hover,
+      .tool-item:hover {
+        color: #016BFF;
+        background: #F5F9FF;
+      }
+
+      .nav-item.active,
+      .tool-item.active {
+        color: #081E40;
+        font-weight: 700;
+      }
+
+      .tool-area {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .tool-nav {
+        max-width: 420px;
+        overflow: auto hidden;
+        scrollbar-width: none;
+      }
+
+      .tool-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .icon-button {
+        width: 28px;
+        height: 28px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+
+      .icon-button:hover {
+        background: #F5F7F9;
+      }
+
+      .icon-button-icon {
+        width: 14px;
+        height: 14px;
+        background: #081E40;
+        -webkit-mask-image: var(--icon);
+        -webkit-mask-position: center;
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-image: var(--icon);
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+      }
+
+      
+
+      .popover-select {
+        height: 30px;
+        padding: 0 12px;
+        border: 1px solid #E0E6EC;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #081E40;
+        font-size: 12px;
+      }
+
+      .popover-select:hover {
+        border-color: #CBD5E0;
+      }
+
+      .popover-select:active {
+        border-color: #016BFF;
+      }
+
+      .popover-divider {
+        height: 1px;
+        margin: 8px 0;
+        background: #E9EEF4;
+      }
+
+      .popover-item {
+        height: 30px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 4px;
+        color: #081E40;
+        font-size: 12px;
+      }
+
+      .popover-item + .popover-item {
+        margin-top: 6px;
+      }
+
+      .popover-item:hover {
+        background: #F5F7F9;
+      }
+
+      .popover-item:active {
+        background: #EFF2F6;
+      }
+
+      .popover-item.logout:hover {
+        background: rgba(234, 55, 54, 0.1);
+        color: #081E40;
+      }
+
+      .popover-item.logout:active {
+        background: rgba(234, 55, 54, 0.05);
+        color: #EA3736;
+      }
+
+      .popover-item.logout:active .popover-icon {
+        filter: brightness(0) saturate(100%) invert(31%) sepia(82%) saturate(2581%) hue-rotate(338deg) brightness(97%) contrast(92%);
+      }
+
+      .popover-left,
+      .popover-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .popover-right {
+        color: #8797AA;
+      }
+
+      .popover-icon,
+      .popover-right-icon {
+        width: 12px;
+        height: 12px;
+        display: block;
+        flex-shrink: 0;
+        background-color: transparent;
+        background-image: var(--icon);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(10%) sepia(38%) saturate(1359%) hue-rotate(189deg) brightness(97%) contrast(101%);
+      }
+
+      .shell {
+        flex: 1;
+        min-height: calc(100vh - 56px);
+        display: grid;
+        grid-template-columns: 160px minmax(0, 1fr);
+      }
+
+      .sidebar {
+        width: 160px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #081E40;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 20;
+      }
+
+      .sidebar-brand {
+        height: 56px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-bottom: 1px solid #213553;
+      }
+
+      .sidebar-logo {
+        width: 130px;
+        height: auto;
+        object-fit: contain;
+        object-position: left center;
+      }
+
+      .project-switcher-wrap {
+        padding: 12px 10px 8px;
+      }
+
+      .project-switcher {
+        width: 140px;
+        height: 40px;
+        padding: 0 10px;
+        border: none;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .project-switcher-arrow {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        background-image: url('../assets/icons/nav/下拉 _ 下.svg');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(100%);
+      }
+
+      .sidebar-scroll {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .menu-section {
+        padding: 12px 8px 0;
+      }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .menu-item {
+        position: relative;
+        height: 40px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 4px;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .menu-item:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .menu-item.active {
+        background: #526279;
+        font-weight: 700;
+      }
+
+      .menu-item.active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 3px;
+        height: 14px;
+        transform: translateY(-50%);
+        border-radius: 999px;
+        background: #016BFF;
+      }
+
+      .menu-icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+        flex-shrink: 0;
+        background-color: transparent;
+        background-image: var(--icon);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      .menu-item.active .menu-icon {
+        opacity: 1;
+      }
+
+      .menu-icon-white {
+        filter: brightness(0) saturate(100%) invert(100%);
+        opacity: 1;
+      }
+
+      .sidebar-footer {
+        border-top: 1px solid #213553;
+        position: relative;
+      }
+
+      .footer-actions {
+        padding: 6px 8px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .sidebar-user {
+        padding: 12px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .user-main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid #FFFFFF;
+        background: #F2C14B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .user-meta {
+        min-width: 0;
+      }
+
+      .user-name {
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .user-email {
+        color: #CED2D9;
+        font-size: 11px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .user-arrow {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        background-color: transparent;
+        background-image: url('../assets/icons/nav/下拉 _ 右.svg');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(100%);
+        transition: transform 0.2s ease;
+      }
+
+      .sidebar-user.open .user-arrow {
+        transform: rotate(180deg);
+      }
+
+      .user-popover {
+        position: absolute;
+        left: calc(100% + 8px);
+        bottom: 12px;
+        width: 208px;
+        padding: 10px;
+        border: 1px solid #E0E6EC;
+        border-radius: 8px;
+        background: #FFFFFF;
+        box-shadow: 0 8px 24px rgba(8, 30, 64, 0.15);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-6px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 5;
+      }
+
+      .user-popover.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+      }
+
+      .content {
+        padding: 24px;
+        min-width: 0;
+      }
+
+      .hero-card,
+      .summary-card,
+      .activity-card,
+      .table-card {
+        background: #FFFFFF;
+        border: 1px solid #ECF2FB;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-card {
+        padding: 24px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 24px;
+      }
+
+      .eyebrow {
+        color: #8797AA;
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .hero-title {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.4;
+        color: #081E40;
+      }
+
+      .hero-desc {
+        margin: 12px 0 0;
+        color: #526279;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        height: 30px;
+        padding: 0 14px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        border: 1px solid #016BFF;
+        background: #016BFF;
+        color: #FFFFFF;
+      }
+
+      .btn-primary:hover {
+        background: #3489FF;
+        border-color: #3489FF;
+      }
+
+      .btn-secondary {
+        border: 1px solid #E0E6EC;
+        background: #FFFFFF;
+        color: #081E40;
+      }
+
+      .btn-secondary:hover {
+        background: #EAEEF3;
+      }
+
+      .hero-side {
+        background: linear-gradient(135deg, #EFF6FF 0%, #F8FBFF 100%);
+        border: 1px solid #DDEBFF;
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .hero-side-title {
+        color: #081E40;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .milestone-list {
+        margin: 12px 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .milestone-item {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+      }
+
+      .milestone-date {
+        color: #016BFF;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .milestone-text {
+        color: #526279;
+        line-height: 1.5;
+      }
+
+      .grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .summary-label {
+        color: #8797AA;
+        font-size: 12px;
+      }
+
+      .summary-value {
+        margin-top: 8px;
+        color: #081E40;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .summary-meta {
+        margin-top: 8px;
+        color: #526279;
+        font-size: 12px;
+      }
+
+      .panel-grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+        gap: 24px;
+      }
+
+      .panel-header {
+        height: 44px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ECF2FB;
+      }
+
+      .panel-title {
+        color: #081E40;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .activity-list,
+      .member-list {
+        list-style: none;
+        margin: 0;
+        padding: 8px 0;
+      }
+
+      .activity-item,
+      .member-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid #ECF2FB;
+      }
+
+      .activity-item:last-child,
+      .member-item:last-child {
+        border-bottom: none;
+      }
+
+      .activity-main,
+      .member-main {
+        color: #081E40;
+        line-height: 1.6;
+      }
+
+      .activity-sub,
+      .member-sub {
+        margin-top: 4px;
+        color: #8797AA;
+        font-size: 12px;
+      }
+
+      .table-card {
+        margin-top: 24px;
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead tr {
+        height: 40px;
+        background: #FAFCFF;
+      }
+
+      th,
+      td {
+        height: 40px;
+        padding: 0 16px;
+        text-align: left;
+        border-bottom: 1px solid #ECF2FB;
+        white-space: nowrap;
+      }
+
+      th {
+        color: #8797AA;
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      tbody tr:hover {
+        background: #F2F8FF;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        height: 24px;
+        padding: 0 8px;
+        border-radius: 999px;
+        background: #EFF6FF;
+        color: #016BFF;
+        font-size: 12px;
+      }
+
+      @media (max-width: 1200px) {
+        .hero-card,
+        .panel-grid,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 960px) {
+        .project-bar {
+          height: auto;
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 12px 16px;
+        }
+
+        .shell {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          width: 100%;
+          min-height: auto;
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="project-bar">
+        <nav class="project-nav" aria-label="项目级导航" data-tab-group="project-tabs">
+          <button class="nav-item active" type="button">需求</button>
+          <button class="nav-item" type="button">任务</button>
+          <button class="nav-item" type="button">缺陷</button>
+          <button class="nav-item" type="button">看板</button>
+          <button class="nav-item" type="button">甘特图</button>
+          <button class="nav-item" type="button">迭代</button>
+          <button class="nav-item" type="button">版本</button>
+        </nav>
+
+        <div class="tool-area">
+          <nav class="tool-nav" aria-label="工具导航" data-tab-group="tool-tabs">
+            <button class="tool-item active" type="button">看板</button>
+            <button class="tool-item" type="button">wiki</button>
+            <button class="tool-item" type="button">文档</button>
+            <button class="tool-item" type="button">报告</button>
+            <button class="tool-item" type="button">报表</button>
+            <button class="tool-item" type="button">设置</button>
+          </nav>
+          <button class="icon-button" type="button" aria-label="消息通知">
+            <span class="icon-button-icon" style="--icon:url('../assets/icons/nav/消息通知.svg')"></span>
+          </button>
+        </div>
+      </header>
+
+      <div class="shell">
+        <aside class="sidebar">
+          <div class="sidebar-brand">
+            <img class="sidebar-logo" src="../assets/logo/icon-bk-devops-white.svg" alt="蓝酸 DevOps" />
+          </div>
+
+          <div class="project-switcher-wrap">
+            <button class="project-switcher" type="button" aria-label="切换项目">
+              <span>DevOps纯定开</span>
+              <span class="project-switcher-arrow" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="sidebar-scroll">
+            <div class="menu-section">
+              <nav class="sidebar-menu" aria-label="项目内菜单" data-menu-group="primary" data-icon-mode="swap">
+                <a class="menu-item active" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/首页-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/首页-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/首页-深色-click.svg')"></span>
+                  <span>项目首页</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/管理-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/管理-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/管理-深色-default.svg')"></span>
+                  <span>项目管理</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/协作-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/协作-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/协作-深色-default.svg')"></span>
+                  <span>敏捷协同</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/代码库-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/代码库-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/代码库-深色-default.svg')"></span>
+                  <span>代码库</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/集成-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/集成-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/集成-深色-default.svg')"></span>
+                  <span>持续集成</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/测试-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/测试-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/测试-深色-default.svg')"></span>
+                  <span>测试管理</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/制品-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/制品-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/制品-深色-default.svg')"></span>
+                  <span>制品管理</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/部署-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/部署-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/部署-深色-default.svg')"></span>
+                  <span>部署</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/价值流-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/价值流-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/价值流-深色-default.svg')"></span>
+                  <span>价值流</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/设置-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/设置-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/设置-深色-default.svg')"></span>
+                  <span>项目设置</span>
+                </a>
+                <a class="menu-item" href="#">
+                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/编辑菜单-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/编辑菜单-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/编辑菜单-深色-default.svg')"></span>
+                  <span>编辑菜单</span>
+                </a>
+              </nav>
+            </div>
+          </div>
+
+          <div class="sidebar-footer">
+            <div class="footer-actions" data-menu-group="footer">
+              <a class="menu-item" href="#">
+                <span class="menu-icon menu-icon-white" style="--icon:url('../assets/icons/menu/系统设置/帮助中心.svg')"></span>
+                <span>帮助中心</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon menu-icon-white" style="--icon:url('../assets/icons/menu/系统设置/消息中心.svg')"></span>
+                <span>消息通知</span>
+              </a>
+            </div>
+
+            <div class="sidebar-user">
+              <div class="user-main">
+                <div class="avatar">胡</div>
+                <div class="user-meta">
+                  <div class="user-name">胡静文</div>
+                  <div class="user-email">hujingwen@better.devops</div>
+                </div>
+              </div>
+              <span class="user-arrow" aria-hidden="true"></span>
+            </div>
+
+            <div class="user-popover" aria-hidden="true">
+              <div class="popover-select">
+                <span>蓝盾</span>
+                <span class="popover-right-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')" aria-hidden="true"></span>
+              </div>
+              <div class="popover-divider"></div>
+              <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/用户.svg')"></span><span>个人中心</span></span></div>
+              <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/系统设置.svg')"></span><span>系统设置</span></span></div>
+              <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/控制台.svg')"></span><span>控制台</span></span></div>
+              <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/日志审计.svg')"></span><span>日志审计</span></span></div>
+              <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/版本信息.svg')"></span><span>版本信息</span></span></div>
+              <div class="popover-item">
+                <span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/外观.svg')"></span><span>外观</span></span>
+                <span class="popover-right"><span>深色</span><span class="popover-right-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')" aria-hidden="true"></span></span>
+              </div>
+              <div class="popover-item"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/中英文.svg')"></span><span>English</span></span></div>
+              <div class="popover-item logout"><span class="popover-left"><span class="popover-icon" style="--icon:url('../assets/icons/nav/注销.svg')"></span><span>注销</span></span></div>
+            </div>
+          </div>
+        </aside>
+
+        <main class="content">
+          <section class="hero-card">
+            <div>
+              <div class="eyebrow">项目概览</div>
+              <h1 class="hero-title">蓝酸 DevOps 需求项目正在稳定推进</h1>
+              <p class="hero-desc">本周已完成迭代需求评审、主干代码合并与测试环境联调。页面风格按框架2统一后的项目体系优化，侧栏交互、图标状态与信息承载密度保持一致。</p>
+              <div class="hero-actions">
+                <button class="btn-primary" type="button">发起需求评审</button>
+                <button class="btn-secondary" type="button">查看迭代看板</button>
+              </div>
+            </div>
+            <aside class="hero-side">
+              <div class="hero-side-title">关键里程碑</div>
+              <ul class="milestone-list">
+                <li class="milestone-item">
+                  <div class="milestone-date">03/21</div>
+                  <div class="milestone-text">完成版本 2.3.0 需求冻结与排期确认</div>
+                </li>
+                <li class="milestone-item">
+                  <div class="milestone-date">03/24</div>
+                  <div class="milestone-text">测试环境回归通过并提交发布审批</div>
+                </li>
+                <li class="milestone-item">
+                  <div class="milestone-date">03/28</div>
+                  <div class="milestone-text">生产窗口发布与版本复盘</div>
+                </li>
+              </ul>
+            </aside>
+          </section>
+
+          <section class="grid">
+            <div class="summary-card">
+              <div class="summary-label">需求总数</div>
+              <div class="summary-value">128</div>
+              <div class="summary-meta">本周新增 12 条，已关闭 9 条</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">进行中任务</div>
+              <div class="summary-value">36</div>
+              <div class="summary-meta">跨 4 个泳道同步推进</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">待修复缺陷</div>
+              <div class="summary-value">7</div>
+              <div class="summary-meta">其中严重级别 1 条</div>
+            </div>
+          </section>
+
+          <section class="panel-grid">
+            <div class="activity-card">
+              <div class="panel-header">
+                <div class="panel-title">最新动态</div>
+                <button class="tool-item" type="button">查看全部</button>
+              </div>
+              <ul class="activity-list">
+                <li class="activity-item">
+                  <div class="activity-main">胡静文 创建了需求 “统一项目通知中心”</div>
+                  <div class="activity-sub">10 分钟前 · 需求管理</div>
+                </li>
+                <li class="activity-item">
+                  <div class="activity-main">李晨 将任务 “测试流水线优化” 更新为开发中</div>
+                  <div class="activity-sub">32 分钟前 · 敏捷协同</div>
+                </li>
+                <li class="activity-item">
+                  <div class="activity-main">张雨 提交了版本 2.3.0 的回归测试报告</div>
+                  <div class="activity-sub">1 小时前 · 测试管理</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="activity-card">
+              <div class="panel-header">
+                <div class="panel-title">核心成员</div>
+                <button class="tool-item" type="button">成员管理</button>
+              </div>
+              <ul class="member-list">
+                <li class="member-item">
+                  <div class="member-main">胡静文 · 项目负责人</div>
+                  <div class="member-sub">负责需求排期、发布节奏与风险控制</div>
+                </li>
+                <li class="member-item">
+                  <div class="member-main">李晨 · 技术负责人</div>
+                  <div class="member-sub">负责主干合并、发布窗口与代码质量</div>
+                </li>
+                <li class="member-item">
+                  <div class="member-main">张雨 · 测试负责人</div>
+                  <div class="member-sub">负责回归覆盖、环境验证与缺陷关闭</div>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="table-card">
+            <div class="panel-header">
+              <div class="panel-title">当前迭代任务</div>
+              <button class="tool-item" type="button">迭代设置</button>
+            </div>
+            <table aria-label="当前迭代任务列表">
+              <thead>
+                <tr>
+                  <th>任务名称</th>
+                  <th>负责人</th>
+                  <th>所属模块</th>
+                  <th>截止时间</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>统一消息中心 UI 联调</td>
+                  <td>李晨</td>
+                  <td>代码库</td>
+                  <td>2026-03-22</td>
+                  <td><span class="status-chip">开发中</span></td>
+                </tr>
+                <tr>
+                  <td>版本发布清单确认</td>
+                  <td>胡静文</td>
+                  <td>版本</td>
+                  <td>2026-03-24</td>
+                  <td><span class="status-chip">待评审</span></td>
+                </tr>
+                <tr>
+                  <td>回归测试覆盖补齐</td>
+                  <td>张雨</td>
+                  <td>测试管理</td>
+                  <td>2026-03-25</td>
+                  <td><span class="status-chip">测试中</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        function syncMenuIcons(group) {
+          if (!group || group.getAttribute('data-icon-mode') !== 'swap') {
+            return;
+          }
+
+          group.querySelectorAll('.menu-item').forEach(function (item) {
+            var icon = item.querySelector('.menu-icon');
+            if (!icon) {
+              return;
+            }
+
+            var defaultIcon = icon.getAttribute('data-icon-default');
+            var clickIcon = icon.getAttribute('data-icon-click');
+            if (!defaultIcon || !clickIcon) {
+              return;
+            }
+
+            var url = item.classList.contains('active') ? clickIcon : defaultIcon;
+            icon.style.setProperty('--icon', "url('" + url + "')");
+          });
+        }
+
+        var sidebarUser = document.querySelector('.sidebar-user');
+        var sidebarPopover = document.querySelector('.user-popover');
+
+        if (sidebarUser && sidebarPopover) {
+          sidebarUser.addEventListener('click', function (event) {
+            event.stopPropagation();
+            var opening = !sidebarPopover.classList.contains('open');
+            sidebarUser.classList.toggle('open', opening);
+            sidebarPopover.classList.toggle('open', opening);
+          });
+
+          sidebarPopover.addEventListener('click', function (event) {
+            event.stopPropagation();
+          });
+
+          document.addEventListener('click', function () {
+            sidebarUser.classList.remove('open');
+            sidebarPopover.classList.remove('open');
+          });
+        }
+
+        document.querySelectorAll('[data-menu-group]').forEach(function (group) {
+          syncMenuIcons(group);
+          group.addEventListener('click', function (event) {
+            var item = event.target.closest('.menu-item');
+            if (!item || !group.contains(item)) {
+              return;
+            }
+
+            event.preventDefault();
+            group.querySelectorAll('.menu-item.active').forEach(function (activeItem) {
+              activeItem.classList.remove('active');
+            });
+            item.classList.add('active');
+            syncMenuIcons(group);
+          });
+        });
+
+        document.querySelectorAll('[data-tab-group]').forEach(function (group) {
+          group.addEventListener('click', function (event) {
+            var target = event.target.closest('.nav-item, .tool-item');
+            if (!target || !group.contains(target)) {
+              return;
+            }
+
+            group.querySelectorAll('.active').forEach(function (activeItem) {
+              activeItem.classList.remove('active');
+            });
+            target.classList.add('active');
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

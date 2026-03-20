@@ -118,14 +118,14 @@
         width: 16px;
         height: 16px;
         display: block;
-        background: #CED2D9;
-        -webkit-mask: var(--icon) center / contain no-repeat;
-        mask: var(--icon) center / contain no-repeat;
+        background-color: transparent;
+        background-image: var(--icon);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(100%);
+        opacity: 1;
         flex-shrink: 0;
-      }
-
-      .menu-item.active .menu-icon {
-        background: #FFFFFF;
       }
 
       .sidebar-user {
@@ -159,9 +159,12 @@
       .user-arrow {
         width: 14px;
         height: 14px;
-        background: #CED2D9;
-        -webkit-mask: url('../assets/icons/nav/下拉 _ 右.svg') center / contain no-repeat;
-        mask: url('../assets/icons/nav/下拉 _ 右.svg') center / contain no-repeat;
+        background-color: transparent;
+        background-image: url('../assets/icons/nav/下拉 _ 右.svg');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(100%);
         transition: transform 0.2s ease;
         flex-shrink: 0;
       }
@@ -289,8 +292,14 @@
         height: 12px;
         display: block;
         background: #081E40;
-        -webkit-mask: var(--icon) center / contain no-repeat;
-        mask: var(--icon) center / contain no-repeat;
+          -webkit-mask-image: var(--icon);
+          -webkit-mask-position: center;
+          -webkit-mask-size: contain;
+          -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
         flex-shrink: 0;
       }
 
@@ -335,8 +344,14 @@
         width: 12px;
         height: 12px;
         background: #B8C4D1;
-        -webkit-mask: url('../assets/icons/nav/下拉 _ 下.svg') center / contain no-repeat;
-        mask: url('../assets/icons/nav/下拉 _ 下.svg') center / contain no-repeat;
+          -webkit-mask-image: url('../assets/icons/nav/下拉 _ 下.svg');
+          -webkit-mask-position: center;
+          -webkit-mask-size: contain;
+          -webkit-mask-repeat: no-repeat;
+          mask-image: url('../assets/icons/nav/下拉 _ 下.svg');
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
       }
 
       .content {
@@ -494,47 +509,47 @@
 
         <nav class="menu" aria-label="系统设置菜单" data-menu-group="primary">
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/系统概览.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/系统概览.svg')"></span>
             <span>系统概览</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/席位管理.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/席位管理.svg')"></span>
             <span>席位管理</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/基础配置.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/权限设置.svg')"></span>
             <span>基础配置</span>
           </a>
           <a class="menu-item active" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/租户管理.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/租户管理.svg')"></span>
             <span>租户管理</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/集成配置.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/集成配置.svg')"></span>
             <span>集成配置</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/制品配置.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/制品配置.svg')"></span>
             <span>制品配置</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/测试配置.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/告警管理.svg')"></span>
             <span>测试配置</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/度量配置.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/度量配置.svg')"></span>
             <span>度量配置</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/OpenAPI.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/OpenAPI.svg')"></span>
             <span>OpenAPI</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/意见反馈.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/意见反馈.svg')"></span>
             <span>意见反馈</span>
           </a>
           <a class="menu-item" href="#">
-            <span class="menu-icon" style="--icon:url('../assets/icons/nav/智能引导.svg')"></span>
+            <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/智能引导.svg')"></span>
             <span>智能引导</span>
           </a>
         </nav>
@@ -542,11 +557,11 @@
         <div class="sidebar-footer">
           <div class="footer-actions" data-menu-group="footer">
             <a class="menu-item" href="#">
-              <span class="menu-icon" style="--icon:url('../assets/icons/nav/消息通知.svg')"></span>
+              <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/消息中心.svg')"></span>
               <span>消息通知</span>
             </a>
             <a class="menu-item" href="#">
-              <span class="menu-icon" style="--icon:url('../assets/icons/nav/帮助中心.svg')"></span>
+              <span class="menu-icon" style="--icon:url('../assets/icons/menu/系统设置/帮助中心.svg')"></span>
               <span>帮助中心</span>
             </a>
           </div>
