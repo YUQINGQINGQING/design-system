@@ -40,7 +40,6 @@
         padding: 0 16px 0 176px;
         display: flex;
         align-items: center;
-        gap: 16px;
         background: #FFFFFF;
         border-bottom: 1px solid #E9EEF4;
       }
@@ -49,13 +48,14 @@
       .tool-nav {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 6px;
         min-width: 0;
       }
 
       .project-nav {
         overflow: auto hidden;
         scrollbar-width: none;
+        height: 100%;
       }
 
       .project-nav::-webkit-scrollbar {
@@ -66,15 +66,17 @@
       .tool-item {
         border: none;
         background: transparent;
-        color: #526279;
+        color: #081E40;
         white-space: nowrap;
         cursor: pointer;
       }
 
       .nav-item {
-        height: 32px;
+        height: 100%;
         padding: 0 12px;
-        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        position: relative;
         font-size: 14px;
       }
 
@@ -85,15 +87,34 @@
         font-size: 12px;
       }
 
-      .nav-item:hover,
       .tool-item:hover {
         color: #016BFF;
         background: #F5F9FF;
       }
 
-      .nav-item.active,
+      .nav-item:hover {
+        color: #016BFF;
+        background: transparent;
+      }
+
+      .nav-item.active {
+        color: #016BFF;
+        font-weight: 700;
+      }
+
+      .nav-item.active::after {
+        content: "";
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 0;
+        height: 3px;
+        background: currentColor;
+        border-radius: 999px;
+      }
+
       .tool-item.active {
-        color: #081E40;
+        color: #016BFF;
         font-weight: 700;
       }
 
@@ -234,7 +255,7 @@
 
       .shell {
         flex: 1;
-        min-height: calc(100vh - 56px);
+        height: calc(100vh - 56px);
         display: grid;
         grid-template-columns: 160px minmax(0, 1fr);
       }
@@ -269,7 +290,7 @@
       }
 
       .project-switcher-wrap {
-        padding: 12px 10px 8px;
+        padding: 12px 10px 0;
       }
 
       .project-switcher {
@@ -307,7 +328,7 @@
       }
 
       .menu-section {
-        padding: 12px 8px 0;
+        padding: 10px 8px 0;
       }
 
       .sidebar-menu {
@@ -374,6 +395,8 @@
       .sidebar-footer {
         border-top: 1px solid #213553;
         position: relative;
+        background: #081E40;
+        z-index: 2;
       }
 
       .footer-actions {
@@ -474,8 +497,24 @@
       }
 
       .content {
-        padding: 24px;
+        grid-column: 2;
+        height: 100%;
+        width: 100%;
+        padding: 6px;
         min-width: 0;
+        background: #F5F9FF;
+        overflow: hidden;
+      }
+
+      .content-layer {
+        width: 100%;
+        height: 100%;
+        background: #FFFFFF;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 0;
+        padding-left: 20px;
+        overflow: auto;
       }
 
       .hero-card,
@@ -756,21 +795,13 @@
           <button class="nav-item" type="button">甘特图</button>
           <button class="nav-item" type="button">迭代</button>
           <button class="nav-item" type="button">版本</button>
+          <button class="nav-item" type="button">活动</button>
+          <button class="nav-item" type="button">Wiki</button>
+          <button class="nav-item" type="button">文档</button>
+          <button class="nav-item" type="button">报告</button>
+          <button class="nav-item" type="button">报表</button>
+          <button class="nav-item" type="button">设置</button>
         </nav>
-
-        <div class="tool-area">
-          <nav class="tool-nav" aria-label="工具导航" data-tab-group="tool-tabs">
-            <button class="tool-item active" type="button">看板</button>
-            <button class="tool-item" type="button">wiki</button>
-            <button class="tool-item" type="button">文档</button>
-            <button class="tool-item" type="button">报告</button>
-            <button class="tool-item" type="button">报表</button>
-            <button class="tool-item" type="button">设置</button>
-          </nav>
-          <button class="icon-button" type="button" aria-label="消息通知">
-            <span class="icon-button-icon" style="--icon:url('../assets/icons/nav/消息通知.svg')"></span>
-          </button>
-        </div>
       </header>
 
       <div class="shell">
@@ -791,15 +822,15 @@
               <nav class="sidebar-menu" aria-label="项目内菜单" data-menu-group="primary" data-icon-mode="swap">
                 <a class="menu-item active" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/首页-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/首页-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/首页-深色-click.svg')"></span>
-                  <span>项目首页</span>
+                  <span>首页</span>
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/管理-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/管理-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/管理-深色-default.svg')"></span>
-                  <span>项目管理</span>
+                  <span>管理</span>
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/协作-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/协作-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/协作-深色-default.svg')"></span>
-                  <span>敏捷协同</span>
+                  <span>协作</span>
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/代码库-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/代码库-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/代码库-深色-default.svg')"></span>
@@ -807,19 +838,15 @@
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/集成-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/集成-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/集成-深色-default.svg')"></span>
-                  <span>持续集成</span>
+                  <span>集成</span>
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/测试-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/测试-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/测试-深色-default.svg')"></span>
-                  <span>测试管理</span>
+                  <span>测试</span>
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/制品-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/制品-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/制品-深色-default.svg')"></span>
-                  <span>制品管理</span>
-                </a>
-                <a class="menu-item" href="#">
-                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/部署-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/部署-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/部署-深色-default.svg')"></span>
-                  <span>部署</span>
+                  <span>制品</span>
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/价值流-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/价值流-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/价值流-深色-default.svg')"></span>
@@ -827,11 +854,7 @@
                 </a>
                 <a class="menu-item" href="#">
                   <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/设置-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/设置-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/设置-深色-default.svg')"></span>
-                  <span>项目设置</span>
-                </a>
-                <a class="menu-item" href="#">
-                  <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/编辑菜单-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/编辑菜单-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/编辑菜单-深色-default.svg')"></span>
-                  <span>编辑菜单</span>
+                  <span>设置</span>
                 </a>
               </nav>
             </div>
@@ -882,137 +905,7 @@
         </aside>
 
         <main class="content">
-          <section class="hero-card">
-            <div>
-              <div class="eyebrow">项目概览</div>
-              <h1 class="hero-title">蓝酸 DevOps 需求项目正在稳定推进</h1>
-              <p class="hero-desc">本周已完成迭代需求评审、主干代码合并与测试环境联调。页面风格按框架2统一后的项目体系优化，侧栏交互、图标状态与信息承载密度保持一致。</p>
-              <div class="hero-actions">
-                <button class="btn-primary" type="button">发起需求评审</button>
-                <button class="btn-secondary" type="button">查看迭代看板</button>
-              </div>
-            </div>
-            <aside class="hero-side">
-              <div class="hero-side-title">关键里程碑</div>
-              <ul class="milestone-list">
-                <li class="milestone-item">
-                  <div class="milestone-date">03/21</div>
-                  <div class="milestone-text">完成版本 2.3.0 需求冻结与排期确认</div>
-                </li>
-                <li class="milestone-item">
-                  <div class="milestone-date">03/24</div>
-                  <div class="milestone-text">测试环境回归通过并提交发布审批</div>
-                </li>
-                <li class="milestone-item">
-                  <div class="milestone-date">03/28</div>
-                  <div class="milestone-text">生产窗口发布与版本复盘</div>
-                </li>
-              </ul>
-            </aside>
-          </section>
-
-          <section class="grid">
-            <div class="summary-card">
-              <div class="summary-label">需求总数</div>
-              <div class="summary-value">128</div>
-              <div class="summary-meta">本周新增 12 条，已关闭 9 条</div>
-            </div>
-            <div class="summary-card">
-              <div class="summary-label">进行中任务</div>
-              <div class="summary-value">36</div>
-              <div class="summary-meta">跨 4 个泳道同步推进</div>
-            </div>
-            <div class="summary-card">
-              <div class="summary-label">待修复缺陷</div>
-              <div class="summary-value">7</div>
-              <div class="summary-meta">其中严重级别 1 条</div>
-            </div>
-          </section>
-
-          <section class="panel-grid">
-            <div class="activity-card">
-              <div class="panel-header">
-                <div class="panel-title">最新动态</div>
-                <button class="tool-item" type="button">查看全部</button>
-              </div>
-              <ul class="activity-list">
-                <li class="activity-item">
-                  <div class="activity-main">胡静文 创建了需求 “统一项目通知中心”</div>
-                  <div class="activity-sub">10 分钟前 · 需求管理</div>
-                </li>
-                <li class="activity-item">
-                  <div class="activity-main">李晨 将任务 “测试流水线优化” 更新为开发中</div>
-                  <div class="activity-sub">32 分钟前 · 敏捷协同</div>
-                </li>
-                <li class="activity-item">
-                  <div class="activity-main">张雨 提交了版本 2.3.0 的回归测试报告</div>
-                  <div class="activity-sub">1 小时前 · 测试管理</div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="activity-card">
-              <div class="panel-header">
-                <div class="panel-title">核心成员</div>
-                <button class="tool-item" type="button">成员管理</button>
-              </div>
-              <ul class="member-list">
-                <li class="member-item">
-                  <div class="member-main">胡静文 · 项目负责人</div>
-                  <div class="member-sub">负责需求排期、发布节奏与风险控制</div>
-                </li>
-                <li class="member-item">
-                  <div class="member-main">李晨 · 技术负责人</div>
-                  <div class="member-sub">负责主干合并、发布窗口与代码质量</div>
-                </li>
-                <li class="member-item">
-                  <div class="member-main">张雨 · 测试负责人</div>
-                  <div class="member-sub">负责回归覆盖、环境验证与缺陷关闭</div>
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section class="table-card">
-            <div class="panel-header">
-              <div class="panel-title">当前迭代任务</div>
-              <button class="tool-item" type="button">迭代设置</button>
-            </div>
-            <table aria-label="当前迭代任务列表">
-              <thead>
-                <tr>
-                  <th>任务名称</th>
-                  <th>负责人</th>
-                  <th>所属模块</th>
-                  <th>截止时间</th>
-                  <th>状态</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>统一消息中心 UI 联调</td>
-                  <td>李晨</td>
-                  <td>代码库</td>
-                  <td>2026-03-22</td>
-                  <td><span class="status-chip">开发中</span></td>
-                </tr>
-                <tr>
-                  <td>版本发布清单确认</td>
-                  <td>胡静文</td>
-                  <td>版本</td>
-                  <td>2026-03-24</td>
-                  <td><span class="status-chip">待评审</span></td>
-                </tr>
-                <tr>
-                  <td>回归测试覆盖补齐</td>
-                  <td>张雨</td>
-                  <td>测试管理</td>
-                  <td>2026-03-25</td>
-                  <td><span class="status-chip">测试中</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
+          <div class="content-layer"></div>
         </main>
       </div>
     </div>

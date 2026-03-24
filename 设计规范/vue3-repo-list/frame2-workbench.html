@@ -140,6 +140,8 @@
       .sidebar-footer {
         border-top: 1px solid #213553;
         position: relative;
+        background: #081E40;
+        z-index: 2;
       }
 
       .footer-actions {
@@ -340,68 +342,96 @@
 
       .workspace-bar {
         height: 56px;
-        padding: 0 20px;
+        padding: 0;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 16px;
         background: #FFFFFF;
         border-bottom: 1px solid #E9EEF4;
       }
 
-      .workspace-left {
+      .topbar-mode {
+        display: none;
+        height: 100%;
+      }
+
+      .topbar-mode.active {
+        display: flex;
+      }
+
+      .topbar-project {
+        width: 100%;
+      }
+
+      .project-nav {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 6px;
+        padding-left: 20px;
         min-width: 0;
+        height: 100%;
+        overflow: auto hidden;
+        scrollbar-width: none;
       }
 
-      .workspace-title {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 700;
+      .project-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-item {
+        border: none;
+        background: transparent;
         color: #081E40;
-        flex-shrink: 0;
-      }
-
-      .workspace-divider {
-        width: 1px;
-        height: 20px;
-        background: #E9EEF4;
-        flex-shrink: 0;
-      }
-
-      .workspace-select {
-        width: 220px;
-        height: 32px;
-        padding: 0 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border: 1px solid #E0E6EC;
-        border-radius: 4px;
-        background: #FFFFFF;
-        color: #081E40;
-        font-size: 12px;
-      }
-
-      .workspace-select:hover {
-        border-color: #CBD5E0;
-      }
-
-      .workspace-select:active {
-        border-color: #016BFF;
-      }
-
-      .workspace-right {
-        color: #8797AA;
-        font-size: 12px;
         white-space: nowrap;
+        cursor: pointer;
+        height: 100%;
+        padding: 0 12px;
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+        font-size: 14px;
+      }
+
+      .nav-item:hover {
+        color: #016BFF;
+        background: transparent;
+      }
+
+      .nav-item.active {
+        color: #016BFF;
+        font-weight: 700;
+      }
+
+      .nav-item.active::after {
+        content: "";
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 0;
+        height: 3px;
+        background: currentColor;
+        border-radius: 999px;
       }
 
       .workspace-body {
         flex: 1;
         min-height: 0;
+        background: #F5F9FF;
+        padding: 6px;
+      }
+
+      .content-layer {
+        width: 100%;
+        height: 100%;
+        background: #FFFFFF;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 0;
+        padding-left: 20px;
+        overflow: auto;
+      }
+
+      .dashboard-grid {
+        min-height: 100%;
         display: grid;
         grid-template-columns: minmax(0, 1fr) 360px;
       }
@@ -743,7 +773,7 @@
       }
 
       @media (max-width: 1200px) {
-        .workspace-body {
+        .dashboard-grid {
           grid-template-columns: 1fr;
         }
 
@@ -765,18 +795,11 @@
 
         .workspace-bar {
           height: auto;
-          align-items: flex-start;
-          flex-direction: column;
           padding: 12px 16px;
         }
 
-        .workspace-left {
-          width: 100%;
-          flex-wrap: wrap;
-        }
-
-        .workspace-right {
-          white-space: normal;
+        .project-nav {
+          height: 32px;
         }
       }
     </style>
@@ -791,6 +814,10 @@
         <div class="sidebar-scroll">
           <div class="menu-section">
             <nav class="menu-group" aria-label="工作台菜单" data-menu-group="primary" data-icon-mode="swap">
+              <a class="menu-item" href="#" data-has-secondary="true" data-secondary-items="需求池|项目">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/项目-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/项目-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/项目-深色-default.svg')"></span>
+                <span>项目</span>
+              </a>
               <a class="menu-item active" href="#">
                 <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/工作台-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/工作台-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/工作台-深色-click.svg')"></span>
                 <span>工作台</span>
@@ -803,21 +830,37 @@
                 <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/文档管理-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/文档管理-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/文档管理-深色-default.svg')"></span>
                 <span>文档管理</span>
               </a>
-              <a class="menu-item" href="#">
+              <a class="menu-item" href="#" data-has-secondary="true" data-secondary-items="仓库|仓库组">
                 <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/GitLab-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/GitLab-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/GitLab-深色-default.svg')"></span>
-                <span>Gitlab</span>
+                <span>GitLab</span>
               </a>
               <a class="menu-item" href="#">
                 <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/价值流插件库-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/价值流插件库-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/价值流插件库-深色-default.svg')"></span>
                 <span>价值流插件库</span>
               </a>
               <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/版本管理-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/版本管理-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/版本管理-深色-default.svg')"></span>
+                <span>版本管理</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/代码库-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/代码库-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/代码库-深色-default.svg')"></span>
+                <span>代码库</span>
+              </a>
+              <a class="menu-item" href="#" data-has-secondary="true" data-secondary-items="效能洞察|仪表板|数据集|数据集|权限配置|报告管理">
                 <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/效能洞察-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/效能洞察-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/效能洞察-深色-default.svg')"></span>
                 <span>效能洞察</span>
               </a>
               <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/知识库-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/知识库-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/知识库-深色-default.svg')"></span>
+                <span>知识库</span>
+              </a>
+              <a class="menu-item" href="#">
                 <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/研发商店-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/研发商店-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/研发商店-深色-default.svg')"></span>
                 <span>研发商店</span>
+              </a>
+              <a class="menu-item" href="#">
+                <span class="menu-icon" data-icon-default="../assets/icons/menu/平台%26项目-深色模式/部署-深色-default.svg" data-icon-click="../assets/icons/menu/平台%26项目-深色模式/部署-深色-click.svg" style="--icon:url('../assets/icons/menu/平台%26项目-深色模式/部署-深色-default.svg')"></span>
+                <span>部署方案</span>
               </a>
             </nav>
           </div>
@@ -869,143 +912,14 @@
 
       <main class="main">
         <header class="workspace-bar">
-          <div class="workspace-left">
-            <h1 class="workspace-title">工作台</h1>
-            <div class="workspace-divider"></div>
-            <div class="workspace-select">
-              <span>默认工作台</span>
-              <span class="popover-right-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')" aria-hidden="true"></span>
-            </div>
-          </div>
-          <div class="workspace-right">工作台可见权限：全员可见</div>
+          <nav class="topbar-mode topbar-project project-nav" aria-label="项目级导航" data-topbar-mode="project" data-tab-group="project-tabs">
+            <button class="nav-item active" type="button">需求池</button>
+            <button class="nav-item" type="button">项目</button>
+          </nav>
         </header>
 
         <section class="workspace-body">
-          <div class="primary-column">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span class="panel-title-icon" style="--icon:url('../assets/icons/nav/工作项列表.svg')"></span>
-                <span>我的待办</span>
-              </div>
-              <div class="panel-tabs" data-tab-group="todo-tabs">
-                <a class="tab-chip active" href="#">敏捷协同 0</a>
-                <a class="tab-chip" href="#">待分解 0</a>
-                <a class="tab-chip" href="#">测试管理 0</a>
-                <a class="tab-chip" href="#">持续集成 0</a>
-                <a class="tab-chip" href="#">评审单 0</a>
-              </div>
-            </div>
-            <div class="panel-body empty-wrap">
-              <div class="empty-state">
-                <div class="empty-graphic"></div>
-                <div class="empty-text">暂无数据</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="secondary-column">
-            <section class="secondary-panel" style="height: 352px;">
-              <div class="panel-header">
-                <div class="panel-title">
-                  <span class="panel-title-icon" style="--icon:url('../assets/icons/nav/项目.svg')"></span>
-                  <span>项目历史</span>
-                </div>
-                <div class="panel-tools">
-                  <button class="btn-primary-light" type="button">+ 创建项目</button>
-                  <button class="btn-ghost" type="button">所有项目</button>
-                </div>
-              </div>
-              <div class="search-bar">
-                <div class="search-field">
-                  <span class="field-icon" style="--icon:url('../assets/icons/nav/搜索.svg')"></span>
-                  <span>请输入关键字</span>
-                </div>
-              </div>
-              <ul class="history-list">
-                <li class="history-item">
-                  <a class="history-link" href="#">
-                    <span class="star-icon"></span>
-                    <span class="history-name">演示数据项目</span>
-                    <span class="history-badge">演</span>
-                  </a>
-                </li>
-                <li class="history-item">
-                  <a class="history-link" href="#">
-                    <span class="star-icon"></span>
-                    <span class="history-name">halley1-1</span>
-                    <span class="history-badge">h</span>
-                  </a>
-                </li>
-                <li class="history-item">
-                  <a class="history-link" href="#">
-                    <span class="star-icon"></span>
-                    <span class="history-name">ljp</span>
-                    <span class="history-badge">l</span>
-                  </a>
-                </li>
-                <li class="history-item">
-                  <a class="history-link" href="#">
-                    <span class="star-icon"></span>
-                    <span class="history-name">halley1</span>
-                    <span class="history-badge">h</span>
-                  </a>
-                </li>
-              </ul>
-            </section>
-
-            <section class="secondary-panel" style="flex: 1; min-height: 0;">
-              <div class="panel-header">
-                <div class="panel-title">
-                  <span class="panel-title-icon" style="--icon:url('../assets/icons/nav/消息通知.svg')"></span>
-                  <span>消息通知</span>
-                </div>
-                <div class="panel-tools">
-                  <div class="toolbar-select">
-                    <span>全部消息</span>
-                    <span class="field-icon" style="--icon:url('../assets/icons/nav/下拉 _ 下.svg')"></span>
-                  </div>
-                  <button class="btn-ghost" type="button">历史通知</button>
-                </div>
-              </div>
-              <ul class="notice-list">
-                <li class="notice-item">
-                  <div class="notice-row">
-                    <div class="notice-avatar"></div>
-                    <div class="notice-content">
-                      <div class="notice-text">[admin]系统管理员给你分配了 CFLOW 平台席位，请在项目价值菜单中使用功能</div>
-                      <div class="notice-date">2025年10月27日</div>
-                    </div>
-                  </div>
-                </li>
-                <li class="notice-item">
-                  <div class="notice-row">
-                    <div class="notice-avatar"></div>
-                    <div class="notice-content">
-                      <div class="notice-text">[admin]系统管理员给你分配了 CMEAS 平台席位，请在项目度量菜单中使用功能</div>
-                      <div class="notice-date">2025年10月27日</div>
-                    </div>
-                  </div>
-                </li>
-                <li class="notice-item">
-                  <div class="notice-row">
-                    <div class="notice-avatar"></div>
-                    <div class="notice-content">
-                      <div class="notice-text">[admin]系统管理员给你分配了 CTEST 平台席位，请在项目测试菜单中使用功能</div>
-                      <div class="notice-date">2025年10月27日</div>
-                    </div>
-                  </div>
-                </li>
-                <li class="notice-item">
-                  <div class="notice-row">
-                    <div class="notice-avatar"></div>
-                    <div class="notice-content">
-                      <div class="notice-text">[admin]系统管理员给你分配了 CTEAM 平台席位，请在项目协作菜单中使用功能</div>
-                      <div class="notice-date">2025年10月27日</div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </section>
+          <div class="content-layer">
           </div>
         </section>
       </main>
@@ -1070,21 +984,63 @@
             });
             item.classList.add('active');
             syncMenuIcons(group);
+
+            if (group.getAttribute('data-menu-group') === 'primary') {
+              updateTopbarMode(item);
+            }
           });
         });
 
+        function updateTopbarMode(activeMenuItem) {
+          if (!activeMenuItem) {
+            return;
+          }
+
+          var hasSecondary = activeMenuItem.getAttribute('data-has-secondary') === 'true';
+          var secondaryItems = (activeMenuItem.getAttribute('data-secondary-items') || '')
+            .split('|')
+            .map(function (item) { return item.trim(); })
+            .filter(Boolean);
+          var projectTopbar = document.querySelector('[data-topbar-mode="project"]');
+
+          if (!projectTopbar) {
+            return;
+          }
+
+          if (hasSecondary) {
+            projectTopbar.innerHTML = '';
+            secondaryItems.forEach(function (itemText, index) {
+              var button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'nav-item' + (index === 0 ? ' active' : '');
+              button.textContent = itemText;
+              projectTopbar.appendChild(button);
+            });
+            projectTopbar.classList.add('active');
+          } else {
+            projectTopbar.innerHTML = '';
+            projectTopbar.classList.remove('active');
+          }
+        }
+
+        var activePrimaryMenu = document.querySelector('[data-menu-group="primary"] .menu-item.active');
+        updateTopbarMode(activePrimaryMenu);
+
         document.querySelectorAll('[data-tab-group]').forEach(function (group) {
           group.addEventListener('click', function (event) {
-            var tab = event.target.closest('.tab-chip');
-            if (!tab || !group.contains(tab)) {
+            var target = event.target.closest('.tab-chip, .nav-item');
+            if (!target || !group.contains(target)) {
               return;
             }
 
-            event.preventDefault();
-            group.querySelectorAll('.tab-chip.active').forEach(function (activeTab) {
+            if (target.classList.contains('tab-chip')) {
+              event.preventDefault();
+            }
+
+            group.querySelectorAll('.active').forEach(function (activeTab) {
               activeTab.classList.remove('active');
             });
-            tab.classList.add('active');
+            target.classList.add('active');
           });
         });
       })();

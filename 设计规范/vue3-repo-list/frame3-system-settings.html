@@ -140,6 +140,8 @@
         border-top: 1px solid #213553;
         padding-top: 0;
         position: relative;
+        background: #081E40;
+        z-index: 2;
       }
 
       .footer-actions {
@@ -356,7 +358,44 @@
 
       .content {
         flex: 1;
-        padding: 24px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .page-topbar {
+        height: 56px;
+        width: 100%;
+        background: #FFFFFF;
+        border-bottom: 1px solid #E9EEF4;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+      }
+
+      .page-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #081E40;
+        line-height: 1;
+      }
+
+      .content-body {
+        flex: 1;
+        background: #F5F9FF;
+        padding: 6px;
+      }
+
+      .content-layer {
+        width: 100%;
+        height: 100%;
+        background: #FFFFFF;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 0;
+        padding-left: 20px;
+        overflow: auto;
       }
 
       .content-card {
@@ -489,10 +528,6 @@
           width: 100%;
           min-height: auto;
         }
-
-        .content {
-          padding: 16px;
-        }
       }
     </style>
   </head>
@@ -597,64 +632,19 @@
       </aside>
 
       <main class="content">
-        <section class="content-card">
-          <div class="content-header">
-            <h1 class="content-title">租户管理</h1>
-            <div class="toolbar">
-              <input class="search-input" type="text" placeholder="请输入租户名称 / 编码" />
-              <button class="btn-primary" type="button">新建租户</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table aria-label="租户列表">
-              <thead>
-                <tr>
-                  <th>租户名称</th>
-                  <th>租户编码</th>
-                  <th>管理员</th>
-                  <th>席位数</th>
-                  <th>创建时间</th>
-                  <th>状态</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>蓝酸研发中心</td>
-                  <td>tenant-lansuan-rd</td>
-                  <td>胡静文</td>
-                  <td>120</td>
-                  <td>2026-01-08 10:24</td>
-                  <td><span class="status-enabled">启用</span></td>
-                </tr>
-                <tr>
-                  <td>金融交付中心</td>
-                  <td>tenant-finance-delivery</td>
-                  <td>李晨</td>
-                  <td>86</td>
-                  <td>2026-01-15 14:33</td>
-                  <td><span class="status-enabled">启用</span></td>
-                </tr>
-                <tr>
-                  <td>智能测试中心</td>
-                  <td>tenant-ai-test</td>
-                  <td>张雨</td>
-                  <td>64</td>
-                  <td>2026-02-01 09:10</td>
-                  <td><span class="status-disabled">停用</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="note">这份页面只基于当前 AGENTS.md 中框架3与资源规则重新生成，不沿用前面页面的实现代码。</div>
-        </section>
+        <header class="page-topbar">
+          <h1 class="page-title">租户管理</h1>
+        </header>
+        <div class="content-body">
+          <div class="content-layer"></div>
+        </div>
       </main>
     </div>
     <script>
       (function () {
         var userCard = document.querySelector('.sidebar-user');
         var popover = document.querySelector('.user-popover');
+        var pageTitle = document.querySelector('.page-title');
         if (!userCard || !popover) {
           return;
         }
@@ -673,10 +663,19 @@
               return;
             }
 
+            event.preventDefault();
+
             group.querySelectorAll('.menu-item.active').forEach(function (activeItem) {
               activeItem.classList.remove('active');
             });
             item.classList.add('active');
+
+            if (group.getAttribute('data-menu-group') === 'primary' && pageTitle) {
+              var label = item.querySelector('span:last-child');
+              if (label) {
+                pageTitle.textContent = label.textContent.trim();
+              }
+            }
           });
         });
 

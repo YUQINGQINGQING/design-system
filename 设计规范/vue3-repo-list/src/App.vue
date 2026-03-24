@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref } from 'vue';
-import PageHeader from './components/PageHeader.vue';
 import FilterTabs from './components/FilterTabs.vue';
 import RepoList from './components/RepoList.vue';
 import '../../CSS/design-tokens.css';
@@ -57,7 +56,6 @@ function handleRepoAction(payload) {
 
 <template>
   <div class="page">
-    <PageHeader title="工作台" />
     <FilterTabs v-model="activeTab" :tabs="tabs" />
     <RepoList :items="visibleRepos" @action="handleRepoAction" />
   </div>
