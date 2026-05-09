@@ -25,3 +25,31 @@
 ## Collaboration Rules
 - If a team member needs customization, clone baseline into a new variant instead of editing baseline directly.
 - Any baseline update must preserve menu names and invocation mapping compatibility.
+
+## Push Automation Rules
+- Remote repository: git@github.com:YUQINGQINGQING/design-system.git
+- Default branch: main
+- Default push command: git push -u origin main
+- Baseline branch policy: always update `main` with rebase-first strategy.
+
+### Authentication Prerequisites
+- Preferred protocol: SSH
+- Repository SSH command binding:
+  - git config core.sshCommand "ssh -i ~/.ssh/id_ed25519_ccode -o IdentitiesOnly=yes"
+- Required SSH public key (GitHub account `YUQINGQINGQING`):
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ/NiypEvmRfXCN8j85gb0Vtil92o4/bqNMfqae2kTv0 YUQINGQINGQING@github
+
+### Conflict Handling Strategy
+- If push is rejected with `fetch first`, run:
+  - git pull --rebase origin main
+- If conflict occurs during rebase, resolve conflict files and continue:
+  - git add <resolved_files>
+  - GIT_EDITOR=true git rebase --continue
+- After rebase completion, push again:
+  - git push -u origin main
+
+### Latest Baseline Push Snapshot
+- Latest pushed commit: 5c0e43f
+- Branch: main
+- Remote: origin (git@github.com:YUQINGQINGQING/design-system.git)
+- Status: pushed successfully
