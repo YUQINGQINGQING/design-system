@@ -1,0 +1,149 @@
+.settings-menu-layout {
+  position: relative;
+  width: 160px;
+  flex: 0 0 160px;
+}
+
+.settings-menu-shell {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  background: #081e40;
+  border-right: 1px solid #ecf2fb;
+  color: #ffffff;
+  display: grid;
+  grid-template-rows: 56px 1fr 56px;
+  overflow: hidden;
+}
+
+.settings-menu-header {
+  height: 56px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #1f3458;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-back-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.settings-back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.settings-title {
+  margin: 0;
+  font: 700 16px/1 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  color: #ffffff;
+}
+
+.settings-menu-item {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.settings-menu-item.active {
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.settings-menu-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.settings-menu-main {
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.settings-item-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon-url);
+  mask-image: var(--icon-url);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.settings-item-label {
+  font: 400 12px/1 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  color: #ffffff;
+}
+
+.settings-menu-item {
+  color: #ffffff;
+}
+
+.settings-menu-item.active .settings-item-label {
+  font-weight: 700;
+}
+
+.settings-menu-footer {
+  border-top: 1px solid #213453;
+}
+
+.settings-tenant-switch {
+  width: 100%;
+  height: 56px;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.settings-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid #ffffff;
+  background: linear-gradient(225deg, #fee2a4 0%, #fbad00 98%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 600 14px/1 'PingFang SC', sans-serif;
+}
+
+.settings-tenant-name {
+  flex: 1;
+  text-align: left;
+  font: 500 12px/1 'PingFang SC', sans-serif;
+}
+
+.settings-arrow {
+  font-size: 10px;
+  opacity: 0.85;
+}
