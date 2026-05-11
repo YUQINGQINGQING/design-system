@@ -32,6 +32,23 @@
 - Default push command: git push -u origin main
 - Baseline branch policy: always update `main` with rebase-first strategy.
 
+## Lightweight Repository Hygiene Rules
+- Keep repository content source-first: only keep code, assets, configs, and required docs.
+- Remove generated artifacts before commit when not explicitly required:
+  - `menu-app/node_modules/`
+  - `menu-app/dist/`
+  - `menu-app/node_modules/.vite/`
+- Remove system cache files before commit:
+  - `.DS_Store`
+  - `**/.DS_Store`
+- Keep design assets and MCP outputs that are baseline inputs only when they are required for traceability.
+- Recommended local cleanup commands:
+  - `find . -name '.DS_Store' -type f -delete`
+  - `rm -rf menu-app/node_modules menu-app/dist`
+- Reinstall and run after cleanup:
+  - `npm --prefix ./menu-app install`
+  - `npm run dev`
+
 ### Authentication Prerequisites
 - Preferred protocol: SSH
 - Repository SSH command binding:

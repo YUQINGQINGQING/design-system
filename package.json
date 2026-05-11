@@ -1,0 +1,11 @@
+{
+  "name": "ccode-menu-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm --prefix ./menu-app run dev",
+    "build": "npm --prefix ./menu-app run build",
+    "preview": "npm --prefix ./menu-app run preview",
+    "lint": "npm --prefix ./menu-app run lint"
+  }
+}
