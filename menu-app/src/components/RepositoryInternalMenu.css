@@ -1,3 +1,18 @@
+/* 返回外部菜单按钮样式 */
+.inner-menu-back-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #016bff;
+  font: 500 13px/1 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  cursor: pointer;
+  padding: 0 8px 0 0;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+.inner-menu-back-btn:hover {
+  color: #003a8c;
+}
 .inner-menu-layout {
   position: relative;
   width: 140px;

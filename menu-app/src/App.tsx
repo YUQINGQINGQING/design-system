@@ -45,6 +45,10 @@ function App() {
             selected={selected}
             onSelect={setSelected}
             onToggle={() => setCollapsed((v) => !v)}
+            onOpenRepositoryInternal={() => {
+              setCollapsed(false)
+              setActiveMenuType(MENU_TYPES.repositoryContent)
+            }}
             onOpenSystemSettings={() => {
               setCollapsed(false)
               setActiveMenuType(MENU_TYPES.systemSettings)
@@ -53,12 +57,16 @@ function App() {
             logoAlt="品牌Logo"
           />
         ) : activeMenuType === MENU_TYPES.repositoryContent ? (
-          <RepositoryInternalMenu
-            collapsed={collapsed}
-            selected={internalSelected}
-            onSelect={setInternalSelected}
-            onToggle={() => setCollapsed((v) => !v)}
-          />
+              <RepositoryInternalMenu
+                collapsed={collapsed}
+                selected={internalSelected}
+                onSelect={setInternalSelected}
+                onToggle={() => setCollapsed((v) => !v)}
+                onBackToExternal={() => {
+                  setCollapsed(false)
+                  setActiveMenuType(MENU_TYPES.repositoryExternal)
+                }}
+              />
         ) : (
           <SystemSettingsMenu
             selected={settingsSelected}

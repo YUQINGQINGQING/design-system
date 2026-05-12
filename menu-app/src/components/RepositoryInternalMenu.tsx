@@ -21,6 +21,7 @@ type RepositoryInternalMenuProps = {
   selected: RepositoryInternalKind
   onSelect: (value: RepositoryInternalKind) => void
   onToggle: () => void
+  onBackToExternal?: () => void // 新增返回外部菜单回调
 }
 
 function InnerIcon({ assetName }: { assetName: string }) {
@@ -38,6 +39,7 @@ export function RepositoryInternalMenu({
   selected,
   onSelect,
   onToggle,
+  onBackToExternal,
 }: RepositoryInternalMenuProps) {
   const [repoDropdownOpen, setRepoDropdownOpen] = useState(false)
   const [currentRepo, setCurrentRepo] = useState('BK1/khh1-...')
@@ -82,17 +84,24 @@ export function RepositoryInternalMenu({
     }
   }, [repoDropdownOpen])
 
-  useEffect(() => {
-    if (collapsed) {
-      setRepoDropdownOpen(false)
-    }
-  }, [collapsed])
+  // ...existing code...
 
   return (
     <div className={`inner-menu-layout ${collapsed ? 'collapsed' : ''}`} data-menu-type="仓库内菜单">
       <section className={`inner-menu-shell ${collapsed ? 'collapsed' : ''}`} aria-label="仓库内菜单">
         <header className="inner-menu-header">
-          <div ref={repoSelectorWrapRef} className={`repo-selector-wrap ${repoDropdownOpen ? 'active' : ''}`}>
+          {onBackToExternal && (
+            <button
+              type="button"
+              className="inner-menu-back-btn"
+              aria-label="返回外部菜单"
+              style={{ marginRight: 8 }}
+              onClick={onBackToExternal}
+            >
+              ← 返回
+            </button>
+          )}
+          <div ref={repoSelectorWrapRef} className={`repo-selector-wrap ${repoDropdownOpen ? 'active' : ''}`}> 
             <button
               type="button"
               className={`repo-selector ${repoDropdownOpen ? 'active' : ''}`}
@@ -101,11 +110,15 @@ export function RepositoryInternalMenu({
               onClick={() => setRepoDropdownOpen((value) => !value)}
             >
               {collapsed ? (
-                <span className="repo-selector-collapsed-mark" aria-hidden="true">▾</span>
+                <span className="repo-selector-collapsed-mark" aria-hidden="true">
+                  ▼
+                </span>
               ) : (
                 <>
                   <span className="repo-name">{currentRepo}</span>
-                  <span className="repo-arrow" aria-hidden="true">▾</span>
+                  <span className="repo-arrow" aria-hidden="true">
+                    ▼
+                  </span>
                 </>
               )}
             </button>
@@ -152,16 +165,15 @@ export function RepositoryInternalMenu({
             )
           })}
         </nav>
+        <button
+          type="button"
+          className="inner-menu-toggle"
+          aria-label={collapsed ? '展开菜单' : '收起菜单'}
+          onClick={onToggle}
+        >
+          {collapsed ? '◂' : '▸'}
+        </button>
       </section>
-
-      <button
-        type="button"
-        className="inner-menu-toggle"
-        aria-label={collapsed ? '展开菜单' : '收起菜单'}
-        onClick={onToggle}
-      >
-        {collapsed ? '◂' : '▸'}
-      </button>
     </div>
   )
 }

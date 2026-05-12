@@ -9,6 +9,7 @@ type MenuFrameworkProps = {
   selected: MenuKind
   onSelect: (value: MenuKind) => void
   onToggle: () => void
+  onOpenRepositoryInternal?: () => void
   onOpenSystemSettings?: () => void
   logoSrc?: string
   logoAlt?: string
@@ -31,6 +32,7 @@ export function RepositoryExternalMenu({
   selected,
   onSelect,
   onToggle,
+  onOpenRepositoryInternal,
   onOpenSystemSettings,
   logoSrc,
   logoAlt = '品牌 Logo',
@@ -62,7 +64,12 @@ export function RepositoryExternalMenu({
                 className={`menu-item ${active ? 'active' : ''}`}
                 aria-current={active ? 'page' : undefined}
                 aria-label={item.label}
-                onClick={() => onSelect(item.key)}
+                onClick={() => {
+                  onSelect(item.key)
+                  if (item.key === '代码仓库') {
+                    onOpenRepositoryInternal?.()
+                  }
+                }}
               >
                 {item.key === '代码仓库' ? (
                   <RepositoryIcon active={active} />

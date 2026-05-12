@@ -1,3 +1,12 @@
+# 📚 规范文档入口
+
+本项目所有菜单开发、调用、协作、推送、仓库清理等高频操作规范，均已写入 [CCODE_MENU_BASELINE_RULES.md](./CCODE_MENU_BASELINE_RULES.md)。
+
+**强烈建议：**
+- 开发/调试/协作前，先阅读并遵循规范文档。
+- 所有标准操作步骤、菜单调用方式、推送要求、目录结构、常见问题处理等均可在规范文档中查阅。
+
+---
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

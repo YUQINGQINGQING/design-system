@@ -19,8 +19,22 @@
   - Alias `?menu=仓库内容菜单` maps to 仓库内菜单.
 
 ## Runtime Navigation Rules
+- In 仓库外菜单, click 代码仓库 to navigate to 仓库内菜单.
 - In 仓库外菜单, click 管理 to navigate to 系统设置菜单.
 - In 系统设置菜单, click the top-left 返回 icon to navigate back to 仓库外菜单.
+
+## Method 1 Standard Operation Steps (High Frequency)
+- Purpose: daily development preview and debugging.
+- Recommended frequency: around 2 times per day.
+- Steps:
+  - `cd /Users/better/Downloads/DevOps-AI/CCode/menu-app`
+  - `npm --prefix ./menu-app install` (run once after cleanup or dependency changes)
+  - `npm run dev`
+  - Open `http://127.0.0.1:4173/`
+  - Stop with `Ctrl + C` when done.
+- Common issue handling:
+  - If port is occupied: `lsof -ti tcp:4173 | xargs kill -9`
+  - Then start again with `npm run dev`.
 
 ## Collaboration Rules
 - If a team member needs customization, clone baseline into a new variant instead of editing baseline directly.
